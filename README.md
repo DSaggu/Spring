@@ -2,5 +2,6 @@
 Real World Spring Projects
 
 # Apache Kafka
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/9007b230-c223-41c3-b827-9a6ce3e7b875" />
+<img width="626" height="319" alt="image" src="https://github.com/user-attachments/assets/e9072e4c-0764-46c4-9097-26369245aac5" />
+
 
