@@ -1,0 +1,16 @@
+#Docker Commands:
+
+Docker Networks - To communicate between different containers.
+docker network create my-network
+docker exec -it pgadmin ping db = executing ping command between pgadmin and db
+docker compose up -d
+docker ps
+docker log containername
+docker compose down
+
+#Mongo DB
+
+#Spring Cloud
+Spring Cloud Refresh - Need to refresh environment variables without restarting the application (dynamic update).
+
+# Configuration Management
