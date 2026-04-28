@@ -14,3 +14,26 @@ docker compose down
 Spring Cloud Refresh - Need to refresh environment variables without restarting the application (dynamic update).
 
 # Configuration Management
+@Value - used to get the  value from properties/yaml fle or environment values.
+
+Precedence order of resolving the configuration values:
+1. Command Line Properties
+2. java System Properties
+3. OS environment variables
+4. application.properties or application.yaml
+5. Spring cloud conig server
+6. Default values inside application code
+
+Spring CLoud Bus - TO refresh configurations without restarting whole application.
+Only beans with @RefreshScope are refreshed.
+Real Usage:
+1. Externalized configuration
+2. Feature Flags
+3. Tuning Parameters (timeout, limit)
+
+#Best Practice for Configuration:
+1. Externalize configurations
+2. Use Profiles
+3. Encrypt sensitive data
+4. Use Secure Connections
+5. Access Control
