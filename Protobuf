@@ -1,0 +1,64 @@
+## Real World Problems:
+
+1. How they work together
+
+You typically define everything in a single .proto file:
+
+message User {
+  string name = 1;
+  int32 age = 2;
+}
+
+service UserService {
+  rpc GetUser (UserRequest) returns (User);
+}
+* Protobuf → defines User message structure
+*  gRPC → turns UserService into callable APIs over the network
+
+Analogy (useful mental model)
+Protobuf = how you package data (like a compressed parcel)
+gRPC = how you deliver that parcel (like a courier system)
+
+- REST excels at cacheable, stateless interactions.
+- gRPC shines for high-frequency, low-latency communication. 
+
+Why is gRPC fast?
+1. HTTP/2 Benefits:
+  Multiplexing (multiple requests over a single connection).
+
+Header compression (reduces data size).
+2. Compact Serialization:
+
+Protocol Buffers are smaller and faster than JSON.
+3. Persistent Connections:
+
+Reduces TCP handshake overhead.
+
+## GitHub Co-Pilot:
+1. Boilerplate Code Generation
+For DTOs, entity classes, and service layers, Copilot helped generate:
+- getters/setters
+- constructors
+- basic validation logic
+
+2. Writing Business Logic
+While implementing service-layer logic, especially conditional flows and error handling, Copilot suggested:
+- null checks
+- edge case handling
+- structured logging patterns
+
+Unit Test Development (Major Impact)
+This is where Copilot added the most value.
+
+3. Using JUnit and Mockito,
+Generated test class skeletons
+Auto-suggested test cases for happy path and edge cases
+Mocked dependencies like repositories and external clients
+
+## Cursor
+Cursor has MCP client. So, connected Cursor to MCP server which was connected to GitLab repository. 
+Wrote rule files to write keywords by analyzing the folders in keywors folder.
+- Variable Names
+- APIs 
+
+Challengs - Use new chat, Use best model - Claude 3.5-sonnet
