@@ -35,5 +35,9 @@ Answer:  Use SEAT formula
 Question: Why do you want to leave current job?
 Answer: I am ready for fresh challenge with new forward thinking and exciting environment, where my skills, qualities and experience will be put to good use.
 
-Question: 
+Question: How would you approach problem never encountered before ?
+Answer: When I encounter a problem I haven’t seen before, I start by clarifying the requirements and constraints to ensure I’m solving the right problem. Then I break it down into smaller parts and identify 
+what I already understand versus what I need to learn. I rely on core engineering fundamentals and patterns to guide my approach, even in unfamiliar domains. I also review documentation, existing code, 
+and collaborate with teammates when needed.I usually build a small prototype or experiment to validate assumptions quickly. For example, in my current role, I worked on systems I wasn’t initially familiar with, 
+so I created mock components and iteratively built up the solution. This approach helps me learn quickly and deliver reliable solutions even in new or complex domains.
 
