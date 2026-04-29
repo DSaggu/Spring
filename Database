@@ -1,0 +1,86 @@
+Database Interview: 
+
+Normal   Form	Fixes	           Key Rule
+1NF	    Repeating data	       Atomic values only
+2NF	    Partial dependency	   Full key dependency
+3NF	    Transitive dependency	 Only depend on PK
+
+1NF ensures atomic values, 2NF removes partial dependencies on composite keys, and 3NF eliminates transitive dependencies so that every non-key attribute depends only on the primary key.
+
+DB connection pool metrics (HikariCP in Java).
+
+We once saw connection pool exhaustion caused not by traffic increase, but by mTLS certificate mismatch across pods. Some services had rotated certificates while others still served old ones, causing intermittent TLS handshake failures. 
+Since TLS handshake is expensive and blocking, failed connections held HTTP pool slots for several seconds, slowly draining the pool. This created cascading timeouts and thread blocking. 
+The fix involved synchronizing certificate rollout, adding readiness probes for cert validity, and tightening HTTP client timeouts to fail fast instead of blocking connections.
+
+What is the Difference Between ROW_NUMBER, RANK, and DENSE_RANK?
+Answer: These three functions are used for ranking rows in SQL queries but differ in how they handle ties.
+
+ROW_NUMBER(): Assigns a unique sequential integer to each row, with no ties. For example, if you have three rows, they would be numbered 1, 2, 3.
+RANK(): Assigns the same rank to tied rows but skips ranks for subsequent rows. For instance, if two rows are tied for first place, they would both be ranked 1, and the next row would be ranked 3.
+DENSE_RANK(): Similar to RANK, but it does not skip ranks. If two rows tie for first place, they both receive a rank of 1, and the next row is ranked 2.
+
+Summary of Ranks:
+ROW_NUMBER: 1, 2, 3
+RANK: 1, 1, 3
+DENSE_RANK: 1, 1, 2
+
+17. How do you implement batch processing in JDBC?
+Answer:
+Batch processing in JDBC allows you to execute multiple SQL statements in a single batch, reducing the number of database round-trips. You use the `addBatch()` method to add statements to the batch and `executeBatch()` to execute them.
+
+String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+PreparedStatement preparedStatement = connection.prepareStatement(sql);
+for (int i = 1; i <= 1000; i++) {
+ preparedStatement.setString(1, "user" + i);
+ preparedStatement.setString(2, "pass" + i);
+ preparedStatement.addBatch();
+}
+int[] updateCounts = preparedStatement.executeBatch();
+
+22. What are some common performance issues in JDBC?
+Answer: Common performance issues in JDBC include:
+- Connection management: Creating and closing database connections for each query can be costly.
+- Inefficient queries: Poorly written SQL queries that retrieve more data than necessary.
+- Lack of batching: Executing SQL statements one by one instead of in batches.
+- Improper resource management: Not closing `ResultSet`, `Statement`, and `Connection` objects, leading to resource leaks.
+- Underutilized PreparedStatement: Not using `PreparedStatement` for repetitive queries, leading to inefficient execution plans.
+
+Ques: Why Not IN does work with NULL ?
+Ans: NOT IN fails because SQL treats NULL as UNKNOWN in three-valued logic. If the subquery contains even one NULL, the comparison becomes UNKNOWN for all rows, and WHERE filters it out. 
+That’s why NOT EXISTS is preferred, as it evaluates existence per row and is not affected by NULL contamination.
+
+=> Calling static method using null reference works.
+=> Abstraction hides implementation details and shows only essential behavior. It focuses on what an object does, not how it does it.
+
+Question: Is it allowed to mark a method abstract as well as final?
+Answer: No
+Reason:
+  abstract → must be overridden
+  final → cannot be overridden
+Both contradict each other
+
+Question: What can be use instead of Marker interfacec ?
+Answer: Instead of marker interfaces, we use annotations. Marker interfaces were used to tag classes, but they lack flexibility and cannot carry metadata. 
+Annotations like @Auditable provide a more powerful and extensible way to attach metadata to classes, which can be processed at runtime using reflection or at compile time by frameworks like Spring. 
+They also avoid forcing inheritance, making the design more flexible and decoupled.
+
+Question: What version of Python did you use ?
+Answer: 3.9.10
+
+Question: What libraries did u use from Pyhton ?
+Answer: requests -> http requests to Spring boot application
+os -> to read performanc data file generated from disk 
+mimetypes -> to find out the extension of image downloaded from Grafana
+logging, warning = to log the messages
+urlParse = 
+
+Question: How do you identify whether issue is in software and hardware ?
+Answer: I approach this by isolating system layers and validating each independently. First, I reproduce the issue and determine if it’s consistent or environment-specific. 
+Then I analyze logs and telemetry—application, system, and hardware.
+
+I often use substitution techniques, like replacing hardware or mocking dependencies, to isolate the fault. 
+For example, I’ve built mock servers to remove external dependencies and verify whether the issue lies in the integration or the core system.
+
+Generally, inconsistent or environment-specific issues point to hardware, while deterministic failures indicate software bugs.
+
