@@ -1,0 +1,54 @@
+Concurrentcy:
+
+https://medium.com/tuanhdotnet/handling-multithreading-in-java-with-completable-future-44a317b5c355
+
+1. Creating a Simple CompletableFuture
+To start with CompletableFuture, you can create a simple asynchronous task. Here’s an example:
+
+import java.util.concurrent.CompletableFuture;
+
+public class CompletableFutureExample {
+    public static void main(String[] args) {
+        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+            System.out.println("Running asynchronously...");
+            // Simulate a long-running task
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        future.join(); // Wait for the task to complete
+        System.out.println("Task completed.");
+    }
+}
+- CompletableFuture.runAsync() executes a task asynchronously.
+- future.join() blocks the main thread until the task is finished.
+
+1.2 Using CompletableFuture with Results
+You can also use CompletableFuture to return results from asynchronous tasks:
+
+import java.util.concurrent.CompletableFuture;
+
+public class CompletableFutureWithResult {
+    public static void main(String[] args) {
+        CompletableFuture<Integer> future = CompletableFuture.supplyAsync(() -> {
+            // Simulate a computation
+            return 5 * 5;
+        });
+
+        future.thenAccept(result -> {
+            System.out.println("The result is: " + result);
+        }).join();
+    }
+}
+- CompletableFuture.supplyAsync() is used for tasks that return a result.
+- thenAccept() processes the result once the computation is complete.
+
+=> ForkJoinPool is a specialized Java thread pool designed for recursive divide-and-conquer tasks using a work-stealing algorithm to efficiently execute many small CPU-bound tasks in parallel.
+=> Where it is used internally
+1. Parallel Streams
+list.parallelStream().map(...).sum();
+2. CompletableFuture (default executor)
+CompletableFuture.supplyAsync(() -> computation);
