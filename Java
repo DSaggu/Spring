@@ -52,3 +52,5 @@ public class CompletableFutureWithResult {
 list.parallelStream().map(...).sum();
 2. CompletableFuture (default executor)
 CompletableFuture.supplyAsync(() -> computation);
+
+=> list.remove() throws ConcurrentModificationException during iteration if the list is being traversed using an iterator, because it breaks the iterator’s expected state; use iterator.remove() instead.
