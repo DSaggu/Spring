@@ -1,1 +1,22 @@
 Dependency Injection (DI) = It is implementation technique for Dependency Inversion Principle.
+
+Circuit breaker and retry are complementary resilience patterns: retry handles transient failures by reattempting requests, while circuit breaker prevents system overload by stopping calls when failures exceed a threshold. 
+In production systems, retry is typically executed inside the circuit breaker to avoid inflating failure counts and triggering premature circuit opening.
+
+resilience4j.circuitbreaker.configs.default.slidingWindowType=COUNT_BASED
+resilience4j.circuitbreaker.configs.default.slidingWindowSize=20
+resilience4j.circuitbreaker.configs.default.minimumNumberOfCalls=10
+resilience4j.circuitbreaker.configs.default.failureRateThreshold=50
+resilience4j.circuitbreaker.configs.default.waitDurationInOpenState=30s
+resilience4j.circuitbreaker.configs.default.permittedNumberOfCallsInHalfOpenState=3
+resilience4j.circuitbreaker.configs.default.automaticTransitionFromOpenToHalfOpenEnabled=true
+
+resilience4j.retry.configs.default.maxAttempts=3
+resilience4j.retry.configs.default.waitDuration=200ms
+resilience4j.retry.configs.default.enableExponentialBackoff=true
+resilience4j.retry.configs.default.exponentialBackoffMultiplier=2
+
+# try 2 times in 4sec with 0 wait time
+resilience4j.retry.configs.default.timeout-duration=0
+resilience4j.retry.configs.default.limit-refresh-period=4
+resilience4j.retry.configs.default.limit-for-period=2
