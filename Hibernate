@@ -1,0 +1,8 @@
+Hibernate:
+
+1. Flush writes SQL but does NOT guarantee durability
+2. Commit guarantees durability (ACID property)
+
+Managed → inside Hibernate session (tracked)
+Detached → outside session (just data)
+Use case → “data travels outside DB boundary”
