@@ -1,0 +1,30 @@
+Ques: How do you select which language to use Java, Python and C/C++ ?
+Ans: “I choose a language based on system constraints. For high-performance or low-level control, I use C++. For scalable backend systems, I prefer Java due to its mature ecosystem and concurrency support. 
+For rapid development or data-heavy tasks, I use Python. In many real-world systems, I combine them—for example, Python for ML, Java for services, and C++ for performance-critical components.”
+
+Ques: How do you select Git provider ?
+Ans: select a Git provider based on CI/CD capabilities, security requirements, hosting model, and ecosystem integration. For example, I’d choose GitHub for its developer experience and strong integrations,
+GitLab when I need an all-in-one DevOps platform or self-hosting, and Bitbucket when working in an Atlassian ecosystem with Jira. The decision depends on balancing team productivity with enterprise 
+requirements.
+
+Ques: How does load configurations work in Spring Boot internally ?
+Ans: @EnableAutoConfiguration works by dynamically importing configuration classes based on classpath and conditions.
+
+Internal flow (brief):
+
+It triggers:
+
+@Import(AutoConfigurationImportSelector.class)
+AutoConfigurationImportSelector:
+
+Reads auto-config classes from: META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
+(older versions: spring.factories)
+
+Applies conditions:
+@ConditionalOnClass
+@ConditionalOnMissingBean
+@ConditionalOnProperty
+Only matching configurations are loaded as @Configuration classes.
+Beans are created, but back off if you already defined your own beans.
+
+It uses AutoConfigurationImportSelector to load predefined configuration classes and conditionally registers beans based on classpath, properties, and existing beans.
