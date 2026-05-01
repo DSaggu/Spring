@@ -20,3 +20,5 @@ resilience4j.retry.configs.default.exponentialBackoffMultiplier=2
 resilience4j.retry.configs.default.timeout-duration=0
 resilience4j.retry.configs.default.limit-refresh-period=4
 resilience4j.retry.configs.default.limit-for-period=2
+
+“Spring Boot auto-configuration scans predefined configuration classes and conditionally registers beans based on classpath, properties, and existing beans.”
