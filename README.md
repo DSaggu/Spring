@@ -19,6 +19,13 @@ Broker - One instance of Kafka.
 Terms:
 <img width="831" height="456" alt="image" src="https://github.com/user-attachments/assets/6ccf8937-74f9-4f48-a385-4289835c229f" />
 
+- String can easily be converted to byteArray but not Object. So, we need to make object serializable when publish to kafka topic.
+  Why String works because Kafka provides: org.apache.kafka.common.serialization.StringSerializer
+
+## Spring Cloud Stream
+- Lets you write plain java functions and then "bind" them to messaging destinations (topics, queues) without writing any broker-specfic code.
+
+
 # Kubernetes
 - desigend to completely manage the lifecycle of containerized applications using methods that provide **predictability**, **scalability** and high **availability**.
 - user can configure how applications should run and interact with outside world. Can run containers on any cloud or any region.
