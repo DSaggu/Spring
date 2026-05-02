@@ -28,3 +28,6 @@ Only matching configurations are loaded as @Configuration classes.
 Beans are created, but back off if you already defined your own beans.
 
 It uses AutoConfigurationImportSelector to load predefined configuration classes and conditionally registers beans based on classpath, properties, and existing beans.
+
+Ques: How to secure rest API ?
+Ans: https://www.freecodecamp.org/news/what-are-json-web-tokens-jwt/?utm_source=sp_auto_dm&utm_referrer=sp_auto_dm&fbclid=PARlRTSARiXOVleHRuA2FlbQIxMABzcnRjBmFwcF9pZA8xMjQwMjQ1NzQyODc0MTQAAaeeat2Alf1qOKULnTjBVZpujhv7FpL7DtmdMiShhWkEA20qpIeqqb5yFGtGrw_aem_-1Ism6ugYTRqfW8z3PUMtA
