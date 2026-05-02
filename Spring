@@ -22,3 +22,18 @@ resilience4j.retry.configs.default.limit-refresh-period=4
 resilience4j.retry.configs.default.limit-for-period=2
 
 “Spring Boot auto-configuration scans predefined configuration classes and conditionally registers beans based on classpath, properties, and existing beans.”
+
+Derived Query Method: Instead of writing the whole query, we just follow naming convention in our repository method. Spring automatically interprests and translates into query. E.g. findByEmailEndingWith
+AuditingEntityListener: Spring DATA JPA class listenes for JPA lifecycle events (like pre-persist and pre-update). When events save or update occurs, the AuditingEntityListener automatically populates 
+the auditing fields within the entity, such as: CreatedDate and LastModifiedDate
+
+Ques: Why string is immutable ?
+Ans: 1. used in password, database connections,
+2. HasMap keys, if String key changes hashcode changes
+3. Java saves common String values in special memory area called String pool. As Strings are immutable, Java can use them safely by saving memory and improving performance.
+
+=> Never perform save or update operations inside read-only transaction. Otherwise Hibernate will not flush those changes to the database.
+=> If readOnly=true, persistence prvide like Hibernate can skip heavy work like dirty checking. Dirty checking means tracking and comparing entity changes. And it does not extra snapshot of entity in memory 
+because of that memory becomes fast and enhances performance.
+=> rollbackFor - used in Transactional annotation to rollback transactio in case of checked exception thrown
+ 
