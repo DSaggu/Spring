@@ -25,10 +25,49 @@ Terms:
 ## Spring Cloud Stream
 - Lets you write plain java functions and then "bind" them to messaging destinations (topics, queues) without writing any broker-specfic code.
 - When you have multiple consumers in same group, they will not read same messages.
+- Kafka guarantees ordering only within a partition
+- Long answer (what interviewers want):
+  => Ordering depends on the message key
+  => Messages with the same key always go to the same partition
+  => Consumers read messages sequentially from a partition
+
+Ques: How would you design a system that needs strict ordering?
+Answer: Choose a meaningful key (userId, orderId, etc.)
+Ensure related events use the same key
+
+Ques: What is session timeout in Kafak ?
+Ans: Each consumer sends periodic heartbeats to the group coordinator.
+ - If heartbeats are received → consumer is alive
+ - If not received within session.timeout.ms → consumer is removed from group
+
+- In Kafka, rebalances are expensive operations that disrupt consumption. Modern systems mitigate this using cooperative rebalancing for incremental partition movement, static group membership to avoid rebalances during restarts, and careful tuning of timeouts and processing behavior to reduce rebalance frequency.
+  - Cooperative rebalancing minimizes disruption by incrementally reassigning only necessary partitions instead of revoking all assignments.
+     - partition.assignment.strategy=org.apache.kafka.clients.consumer.CooperativeStickyAssignor
+ - Static membership avoids unnecessary rebalances by giving consumers a stable identity across restarts.
+    - Restart does NOT trigger rebalance (within timeout window)
+    - Kafka treats it as the same member
+ - Reducing rebalance frequency involves tuning timeouts, using cooperative rebalancing and static membership, and designing consumers to avoid frequent join/leave events.
+
+Ques. What Is Exactly-Once Semantics in Kafka?
+Ans: Exactly-once semantics means:
+    Each message affects the system only once
+    Even during failures or retries
+    Kafka achieves this using:
+     - Idempotent producers
+     - Transactions
+     - Consumer offsets stored atomically
+
+Ques: Consumer lags ?
+Ans: 
+1. 
+1. Partition vs Consumer Count Mismatch 
+ - One consumer can only read one partition at a time. Adding consumers without adding partitions does nothing
+ - Kafka scales by partitions, not consumers
 
 <img width="1452" height="700" alt="image" src="https://github.com/user-attachments/assets/bdd28c06-f759-4ac8-979c-280eaead9e9d" />
 
-
+- min.insync.replicas defines the minimum number of in-sync replicas that must acknowledge a write (with acks=all) for Kafka to accept it, ensuring durability against broker failures.
+- In Kafka, partitions are distributed across consumers within a group such that each partition is consumed by only one consumer at a time, enabling parallel processing while preserving ordering within each partition. In case, there partiitons > consumers then each consumer can have multiplle different partitions.
 
 # Kubernetes
 - desigend to completely manage the lifecycle of containerized applications using methods that provide **predictability**, **scalability** and high **availability**.
