@@ -24,6 +24,10 @@ Terms:
 
 ## Spring Cloud Stream
 - Lets you write plain java functions and then "bind" them to messaging destinations (topics, queues) without writing any broker-specfic code.
+- When you have multiple consumers in same group, they will not read same messages.
+
+<img width="1452" height="700" alt="image" src="https://github.com/user-attachments/assets/bdd28c06-f759-4ac8-979c-280eaead9e9d" />
+
 
 
 # Kubernetes
