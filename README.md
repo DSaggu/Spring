@@ -79,27 +79,45 @@ Ans:
   - Horizontal Scaling (Scale out and scale down)
   - Self-Healing (Will automatically restart)
   - Secret and Configuration management ( deploy applicatino configurations without stopping containers and secure credentials using kubernetes secret)
-
+  - etcd = stores configuration to be shared across all worker nodes.
   <img width="926" height="544" alt="image" src="https://github.com/user-attachments/assets/45587e73-3fe9-4f60-8e47-cc277cb1f3f1" />
 
   ## Minikube
    - Helps to run Kubernetes locally. It should not be used on production. On Production, AWS Kubernetes can be used to deploy on cloud.
+     
    ### POD = Group of one or more containers and shared resources such as volumes(storage), IP Address and network ports. 
-     - > Ephimeral = Can be created, scheduled and destroyed dynamically.
-       > Pods not scale automatically
+       > Ephimeral = Can be created, scheduled and destroyed dynamically.
+       > Pod is not durable means. If pod is failed or terminated it cannot be restarted or resumed. Instead new POD will be created and           will be replaced.
+       > Pods are atomic so cannot be modified
+       > Pods not scale automatically horizontally, need to do it with replicaset
        > steteless = configurations need to be shared
        > Communicate with each-other localhost
-       > Pos are assigned uniqe IP address within same cluster 
+       > Pods are assigned uniqe IP address within same cluster 
 
    ### Service
-     - > single access point for pods and containers inside it.
-       > LoadBalancer = Type of service to expose application to the outside world.
+     - > single access point for pods and containers inside it and help you to communicate with pod.
+
+     #### Service Types
+        1. Cluster IP = default, within cluster
+        2. Node Port = access the service outside pod
+        3. Load Balancer  = access the service externally. Give fixed IP to service.
+  
+   LoadBalancer = Type of service to expose application to the outside world.
        > Replica Set = Idenetical Pods
           -> High Avalilability, Rolling Updates, Service Discovery and Load Balancing
           > Use selector to identify the pods it manages.
 
-## Deployments
+    When updating the configuration of pods, such as image versions or resource requirements. It's recommended to use deployments.
 
+   Database = stateful in kubernetes, need volume to keep persistent data
+  
+  ### Commands
+  1. Kubectl get pods
+  2. kubectl get service
+
+## Deployments
+   => change actual state to desired state by pushing rolling updates ensuring no downtime.
+   => help in scaling and self-healing
        
 
 
