@@ -1,0 +1,16 @@
+Ques: Why don't we need API gateway and Eureka Server in Kubernetes ?
+Ans: API Gateway -> Service Mesh, Ingress
+Service Discovery also managed by Kubernetes
+
+So, No need of API gateway and Eureka server in Kubernetes. Only in local environemnt. Even we don't need config server.
+
+-> Set up service and deployment(cantains replica) file for each microservice.
+# Deployement
+- replicaset, restartPolicy = always, Environment variabless, selects pod with label
+
+# Service
+- also define port and target port
+
+https://www.youtube.com/watch?v=V63YCnGpMoQ&list=PLV1HZYG6utmWGTXMmQxbPNadE_F0_BG7R
+
+Docker Images -> Registry in ECR ->
