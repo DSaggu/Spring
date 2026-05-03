@@ -36,4 +36,10 @@ Ans: 1. used in password, database connections,
 => If readOnly=true, persistence prvide like Hibernate can skip heavy work like dirty checking. Dirty checking means tracking and comparing entity changes. And it does not extra snapshot of entity in memory 
 because of that memory becomes fast and enhances performance.
 => rollbackFor - used in Transactional annotation to rollback transactio in case of checked exception thrown
+=> “In Spring, if a bean has a single constructor, dependency injection is automatically handled without @Autowired—this is constructor-based injection and is the recommended approach.”
+=> “No, a Spring bean can only be instantiated using one constructor. If multiple constructors are present, only one can be annotated with @Autowired to resolve ambiguity. Multiple autowired constructors would cause a bean creation failure.”
+= Use a single constructor and optional dependencies via:
+public AdminController(UserService userService, Optional<AuditService> auditService) {
+    this.userService = userService;
+}
  
