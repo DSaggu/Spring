@@ -40,6 +40,20 @@ because of that memory becomes fast and enhances performance.
 => “No, a Spring bean can only be instantiated using one constructor. If multiple constructors are present, only one can be annotated with @Autowired to resolve ambiguity. Multiple autowired constructors would cause a bean creation failure.”
 = Use a single constructor and optional dependencies via:
 public AdminController(UserService userService, Optional<AuditService> auditService) {
+
+=> Here max concurrency is 100, means Only 100 calls will run at the same time. The remaining 900
+will wait in the reactive pipeline queue.
+
+Flux.fromIterable(users)
+.flatMap(user ->
+webClient.get()
+.uri("https://api.external.com/sync/{id}", user.getId())
+.retrieve()
+.bodyToMono(String.class),
+100 // max 100 parallel calls
+)
+.collectList()
+.block();
     this.userService = userService;
 }
  
