@@ -1,0 +1,9 @@
+SNS: https://www.youtube.com/watch?v=1vMo6K4Zyas. Its pudh model.
+
+SQS: Pull model 
+
+Elastic Cache: https://www.youtube.com/watch?v=dSybACt3fX8
+Its not serverless. U need instnaces for that. Its in-memory cache like Redis and Hazelcast.
+
+AWS Kineses: https://www.youtube.com/watch?v=2bGE5mFrcSw
+Its alternative of Kafka.
