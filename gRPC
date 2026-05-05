@@ -1,0 +1,72 @@
+The Serializable interface in Java is a marker interface that allows an object to be converted into a byte stream 
+for storage, transmission, or caching, ensuring that only explicitly permitted classes can be serialized.
+
+REST APIs use HTTP, and HTTP usually uses TCP.
+
+Serialization options for diffferent technologies.
+
+JMS	-> Optional (ObjectMessage = Java serialization, TextMessage = JSON)
+Kafka ->	Always serialized (Avro / JSON / Protobuf / String / bytes)
+gRPC-> Always serialized using Protocol Buffers
+
+Properties of gRPC:
+1. High Throughput
+2.  Binary format
+3. Size relatively smaller
+4. proto1 = google internal
+   proto2 = new (optional, required) etc.
+   proto3 = easy to use
+5. prrotoc = compiler
+
+Properties of fields:
+1. No mutable, cannot call setter method directly on object.
+2. Can create new objects with updated value  by converting builder and then build.
+3. Cannot set null, instead need to use clearFieldName.
+
+Data Types:
+1. int = int32/Sint32
+2. long = int64/Sint64
+3. boolean = bool
+4. byte[] = byte
+- all fields are optional from generated file.
+
+message Car {
+  string name = 1;
+}
+
+enum BodyStyle {
+  unknown = 0; // Default value
+  SEDAN = 1;
+  COUPE = 2;
+}
+
+message Cars {
+  repeated Car car = 1;  
+}
+
+message Dealer {
+  Car car = 1;
+  repeated Car cars = 2; // repeated creates coolection for List and Set
+  Map<int32, Car> map = 3;
+  Map<int32, Cars> listCarsMap = 4;
+}  
+
+- Field never has null value but has some default value. So, hasValue() can be used to check if it not default value.
+
+So it is clear that when transferring data in gRPC no field names are getting transferred. Client and the Server only relies on the field numbers for serializing the deserializing.
+That is one of the key advantage gained by gRPC to reduce the payload of the transferring data.
+
+Field numbers below 16 are considered “compact” because they require only one byte in the metadata section.
+
+Performance Advantage: When fields have numbers between 1 and 15, they consume less bandwidth, which reduces latency. 
+This is particularly advantageous for frequently accessed fields since they benefit from reduced encoding overhead.
+
+Optimized Storage: By keeping essential fields within this range, the overall message size is minimized, leading to better performance for high-throughput systems.
+
+- gRPC always sends the message in order.
+- Streaming if multiple messages are coming. Not constant polling.
+
+=> gRPC uses it as a transport protocol, which enhances performance with features like multiplexing, flow control, and header compression. 
+This understanding reinforces your knowledge of modern web protocols and their applications in efficient communication.
+
+=> HTTP/2 multiplexing allows multiple independent request-response streams to be sent concurrently over a single TCP connection by interleaving frames, eliminating application-level head-of-line blocking.
