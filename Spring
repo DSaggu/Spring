@@ -56,4 +56,95 @@ webClient.get()
 .block();
     this.userService = userService;
 }
- 
+=> A servlet is a Java server-side component that runs inside a servlet container and processes HTTP requests and responses, forming the foundation of Java web applications. E.g. DispatcherServlet
+=> Yes, we can override a servlet by extending HttpServlet or DispatcherServlet and overriding lifecycle methods like doGet, doPost, or doDispatch. However, in modern Spring applications, 
+it’s recommended to use filters, interceptors, or controller advice instead of overriding servlet implementations directly.
+
+=> when we create a repository interface that extends JpaRepository, CrudRepository, or PagingAndSortingRepository, Spring automatically finds it and creates an implementation at runtime. @Repository then?
+It is mainly about exception translation. If something goes wrong in the database (like a SQLException (persistence)), @Repository tells Spring to wrap it into a generic DataAccessException. This way,
+the error handling stays consistent. It does not handle the exception, it translates them to spring exception.
+For instance, DataIntegrityViolationException → duplicate key
+              EmptyResultDataAccessException → no data found
+
+=> @ControllerAdvice does not use AOP proxies. Instead, Spring MVC’s DispatcherServlet catches exceptions and delegates them to HandlerExceptionResolver, 
+specifically ExceptionHandlerExceptionResolver, which maps exceptions to @ExceptionHandler methods defined in @ControllerAdvice.
+
+Controller throws exception  -> DispatcherServlet catches -> HandlerExceptionResolver -> @ControllerAdvice method
+
+AOP Proxy (e.g., @Transactional)
+Client -> Proxy (AOP) -> Target method -> Commit / Rollback / Exception handling
+
+=> Request > DelegatingFilterProxy > FilterChainProxy (Spring Security-specific filter) > Security Filters > DispatcherServlet > Controller
+=> In modern Spring applications, typically only one servlet (DispatcherServlet) is used, which routes requests to multiple controllers.
+Even though there is one servlet instance, it can handle many requests simultaneously.
+
+👉 The container uses a thread pool
+
+Request 1 → Thread-1 → servlet.service()
+Request 2 → Thread-2 → servlet.service()
+Request 3 → Thread-3 → servlet.service()
+
+All threads call the same servlet object. Each request gets its own:
+- HttpServletRequest
+- HttpServletResponse
+- Thread
+protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+👉 These are NOT shared, so they are thread-safe
+
+Rate limiting does not affect the servlet’s singleton or multithreaded nature. Instead, it limits the number of incoming requests before they reach the servlet, reducing concurrent thread execution, 
+preventing thread pool exhaustion, and protecting downstream systems like databases.
+
+Client -> Servlet Container (Tomcat) -> Custom Servlet Filters (your filters) -> Spring Security Filter Chain -> DispatcherServlet -> Controller
+
+=> REST vs GRPC
+1. Core idea difference
+REST	                                        gRPC
+Resource-based (CRUD over HTTP)	                Function/RPC-based (call methods remotely)
+Uses HTTP/1.1 or HTTP/2                      	Uses HTTP/2
+Usually JSON	                                Protocol Buffers (binary)
+Human-readable	                                Machine-optimized
+
+-> If there is no TCP connection between OD and Caprica then gRpc data cannot be transferred.
+-> “You don’t manually manage the connection between PostMan and API server; it is automatically created and managed by HTTP over TCP.”
+
+=> gRPC is an RPC framework that uses HTTP/2 as its underlying transport protocol over TCP. It relies on a .proto contract to generate client and server stubs. During execution, the client serializes 
+requests using Protocol Buffers and sends them over a persistent HTTP/2 connection, which gRPC manages using TCP underneath. The server receives, processes, and responds using the same mechanism.
+
+=> In gRPC microservices, service discovery is handled externally (like Kubernetes or Consul) to locate service instances, while load balancing is typically client-side, where the gRPC client distributes 
+requests across available instances using policies like round-robin over HTTP/2 connections.
+
+=> In production systems, we avoid direct many-to-many mappings and instead introduce an explicit join entity (like Enrollment) because it allows us to store relationship attributes, improves maintainability, 
+avoids hidden join tables, and gives better control over lifecycle, performance, and schema evolution.
+
+=> mappedBy defines the inverse side of a bidirectional relationship. It tells Hibernate that the relationship is already mapped and owned by another entity field, so this side should not manage the foreign key 
+or schema. Only the owning side updates the database.
+
+class Course {
+    @OneToMany(mappedBy = "course")
+    List<Enrollment> enrollments;
+}
+
+class Enrollment {
+    @ManyToOne
+    @JoinColumn(name = "course_id") // owns relationship
+    Course course;
+}
+
+If we remove mappedBy, Hibernate cannot identify the owning side of the relationship. This often results in creation of an additional join table, redundant mappings, inconsistent updates, and unpredictable 
+behavior in cascading and schema generation. mappedBy is essential to ensure a single source of truth for the association.
+
+The owning side is the entity that contains the foreign key column in the database. Only the owning side is responsible for updating the relationship in the database.
+Updating the inverse side only does NOT persist changes. Only the owning side controls the database foreign key.
+
+Middleware = Middleware is any software layer that sits between request and response processing. E.g Gatekeeper (External), INtercepter (internal)
+Real production example: Imagine an e-commerce system:
+    At Gateway:
+     - Check JWT token
+     - Block unauthenticated users
+     - Route /orders → Order Service
+     - Inside Order Service:
+
+    Interceptor:
+     - Add correlation ID
+     - Log request timing
+     - Validate business-level permissions
