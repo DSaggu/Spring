@@ -1,0 +1,36 @@
+Order of starting:
+
+Config server -> Eureka Server -> micro-services -> Gateway Server
+
+Real Request Flow:
+Client Request → Gateway -> Spring Security (JWT validation) -> Route Matching (Path predicate) -> Load Balancer (lb://SERVICE) ->
+Service Instance -> Fallback (if failure)
+
+In production, API Gateway uses Spring Cloud Gateway with Eureka-based service discovery, lb:// for load balancing, Spring Security for 
+JWT validation, and circuit breakers with fallback endpoints. 
+Routes are predicate-based, and a default route or controller is configured for / since Gateway doesn’t provide one by default.
+
+It is recommended to move gateway configuration to configuration server.
+
+Ques: Where to put routes configuration ?
+Ans: In java configurations not in yaml.
+
+Feature                 YAML CONF                     JAVA CONFIG
+Complex Filters         Impossible                    Fully Customizable
+Readability             Easier for simple routes      Not recommende for simple routes
+Custom Logic ( JWT, Rate Limit, Circuit Breaker)         Limited                       Flexible
+
+With Eureka server, we want API gateway to go to the root URL.
+
+Properties:
+1. Small traffic controller, router or middleman.
+
+Gateway Patterns:
+1. Backend for frontend = different gateways for differt types of cleints
+2. Single entry point = Single GW point for different types of client. Simple management. All clients have same requirement.
+3. Aggregation Gateway = Combination of responses for different microservices send to GW
+
+Best Practices:
+1. Load Balancer
+2. Authentication and Security
+3. Handle Errors Gracefully = fallback response
