@@ -165,5 +165,27 @@ SQLException → DataAccessException
 ✔ Built-in pagination & sorting
 ✔ Works across multiple databases
 
+Ques: How to configure HikariCP ?
+Ans: #Pool Size
+spring.datasource.hikari.maximum-pool-size=20
+spring.datasource.hikari.minimum-idle=5 //Time after which idle connections are removed
+
+# Timeouts
+spring.datasource.hikari.connection-timeout=30000
+spring.datasource.hikari.idle-timeout=30000
+spring.datasource.hikari.max-lifetime=1800000
+
+JDBC Driver	    Talks to         PostgreSQL
+HikariCP	    Manages          DB connections
+Hibernate	     ORM / SQL generation
+Spring Data JPA     	Repository abstraction
+
+=> Both C3P0 and HikariCP are JDBC connection pools used in Java applications to manage database connections efficiently. But HikariCP is used becauase it has high performance and lightweight.
+
+# Debugging
+spring.datasource.hikari.leak-detection-threshold=2000
+
 => A local variable exists only within a method and is stored in stack memory, whereas a ThreadLocal variable is bound to a thread and allows data to be shared across methods within the same thread
 while remaining isolated from other threads.
+
+=
