@@ -1,6 +1,8 @@
 SNS: https://www.youtube.com/watch?v=1vMo6K4Zyas. Its pudh model.
+Java integration: https://www.youtube.com/watch?v=oFBht_Fuv-s
 
 SQS: Pull model 
+Java Integration: https://www.youtube.com/watch?v=smR8TYzBE4s
 
 Elastic Cache: https://www.youtube.com/watch?v=dSybACt3fX8
 Its not serverless. U need instnaces for that. Its in-memory cache like Redis and Hazelcast.
