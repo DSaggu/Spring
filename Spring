@@ -148,3 +148,11 @@ Real production example: Imagine an e-commerce system:
      - Add correlation ID
      - Log request timing
      - Validate business-level permissions
+
+=> Exception Translation
+
+Spring automatically converts low-level exceptions with @Repository
+
+SQLException → DataAccessException
+
+👉 This happens only with @Repository
