@@ -34,3 +34,6 @@ Best Practices:
 1. Load Balancer
 2. Authentication and Security
 3. Handle Errors Gracefully = fallback response
+
+Circuit Breaker = When service is down
+Rate Limiter = When service is running. Only when servive throws erorr not service down. (JMeter to test Rate Limiter)
