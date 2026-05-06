@@ -89,3 +89,5 @@ Thread starvation: a thread never gets a chance to run because resources are exh
 - rate limiting
 - circuit breaker
 - request throttling
+- Use timeout
+- bulkhead pattern
