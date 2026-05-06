@@ -156,3 +156,14 @@ Spring automatically converts low-level exceptions with @Repository
 SQLException → DataAccessException
 
 👉 This happens only with @Repository
+
+=> Spring Data is a part of the Spring Framework ecosystem that removes boilerplate code for database access and lets you focus on business logic instead of writing SQL or DAO implementations.
+
+✔ No DAO implementation needed
+✔ Less boilerplate code
+✔ Automatic query generation
+✔ Built-in pagination & sorting
+✔ Works across multiple databases
+
+=> A local variable exists only within a method and is stored in stack memory, whereas a ThreadLocal variable is bound to a thread and allows data to be shared across methods within the same thread
+while remaining isolated from other threads.
