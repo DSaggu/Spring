@@ -70,3 +70,4 @@ Optimized Storage: By keeping essential fields within this range, the overall me
 This understanding reinforces your knowledge of modern web protocols and their applications in efficient communication.
 
 => HTTP/2 multiplexing allows multiple independent request-response streams to be sent concurrently over a single TCP connection by interleaving frames, eliminating application-level head-of-line blocking.
+=> HTTP/1.1 uses multiple connections and processes requests sequentially, while HTTP/2 uses a single connection with multiplexed binary streams for faster and more efficient communication.
