@@ -1,0 +1,87 @@
+1. Renetrant Lock:
+ => lock(), unclock(), condition.await(), cond.signal()
+
+2. Semaphore:
+ => acquire, release
+
+3. CountDownLatch latch
+=> latch.countDown(), latch.await()
+
+4. wait(), notify(), and notifyAll() must be called within a synchronized block on the same object; 
+otherwise, an IllegalMonitorStateException is thrown. This ensures the calling thread owns the monitor so the JVM can safely coordinate thread waiting and notification.”
+
+Volatile = Prevents thread from cache variable which was not updated in run method.
+
+5. Thread Interleaving = Whem more than one thread udating variable and its not thread safe
+
+
+Methods to avoid deadlock:
+
+1. Always acquire lock in fixed global order
+2. Avoid nested locks
+3. Use timeout based locks
+4. Mininmize critical section
+5. Avoid blocking calls inside locks
+6. Use concurrent utilities instead of manual locks - ConcurrentHashMap, BlockingQueue, atomic classes (AtomicInteger, AtomicReference, AtomicBoolean)
+
+Ques: Can we create singleton using AtomicReference ?
+Ans: yes, but if 5 threads pass this (INSTANCE.get() == null) only one will set. Works but inefficient.
+
+public class Singleton {
+    private static final AtomicReference<Singleton> INSTANCE = new AtomicReference<>();
+
+    private Singleton() {}
+
+    public static Singleton getInstance() {
+        if (INSTANCE.get() == null) {
+            INSTANCE.compareAndSet(null, new Singleton());
+        }
+        return INSTANCE.get();
+    }
+}
+
+So, initialization on demand.
+
+public class Singleton {
+    private Singleton() {}
+
+    private static class Holder {
+        static final Singleton INSTANCE = new Singleton();
+    }
+
+    public static Singleton getInstance() {
+        return Holder.INSTANCE;
+    }
+}
+
+Double checked Locking:
+
+private static volatile Singleton instance;
+
+public static Singleton getInstance() {
+    if (instance == null) {  // removes thread contention, because otherwise all thread will try to acquire lock object.
+        synchronized (Singleton.class) {
+            if (instance == null) {
+                instance = new Singleton();
+            }
+        }
+    }
+    return instance;
+}
+
+Correct (safe)
+1. Allocate memory
+2. Initialize object (run constructor)
+3. Assign reference
+
+👉 Other threads see fully initialized object
+❌ Incorrect (unsafe)
+1. Allocate memory
+2. Assign reference
+3. Initialize object (run constructor)
+
+Thread contention: multiple threads compete for the same resource (like a lock), so some have to wait.
+👉 Example: many requests in a Spring Boot service trying to update the same cache entry, causing delays.
+
+Thread starvation: a thread never gets a chance to run because resources are exhausted.
+👉 Example: all threads in a pool are blocked on a slow API call, so new requests never get processed.
