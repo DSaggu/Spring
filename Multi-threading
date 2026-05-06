@@ -85,3 +85,7 @@ Thread contention: multiple threads compete for the same resource (like a lock),
 
 Thread starvation: a thread never gets a chance to run because resources are exhausted.
 👉 Example: all threads in a pool are blocked on a slow API call, so new requests never get processed.
+🔥 Example: API Gateway protection
+- rate limiting
+- circuit breaker
+- request throttling
