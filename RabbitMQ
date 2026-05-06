@@ -1,0 +1,8 @@
+- Bind exchange with queue with routing key 
+-  key controls which messages go to Queue
+- messageConverter to convert the java object to jsona and vice-versa.
+- We have to tell everytime, which exchange and whihc key we are sending message to.
+- RabbitTemplate is not needed in COnsumer beause it is not sending the messages just consuming it.
+- Admin set up is also not needed in Consumer only in producer.
+
+@RabbitListener = to pull messages from the queue.
