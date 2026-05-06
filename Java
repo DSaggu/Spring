@@ -1,6 +1,10 @@
-Concurrentcy:
+Concurrentcy: https://medium.com/tuanhdotnet/handling-multithreading-in-java-with-completable-future-44a317b5c355
 
-https://medium.com/tuanhdotnet/handling-multithreading-in-java-with-completable-future-44a317b5c355
+=> Agile software development is a way of building software in small, iterative cycles instead of one big release.
+
+Key idea:
+
+Deliver small increments frequently, adapt based on feedback.
 
 1. Creating a Simple CompletableFuture
 To start with CompletableFuture, you can create a simple asynchronous task. Here’s an example:
@@ -55,3 +59,48 @@ CompletableFuture.supplyAsync(() -> computation);
 
 => list.remove() throws ConcurrentModificationException during iteration if the list is being traversed using an iterator, because it breaks the iterator’s expected state; use iterator.remove() instead.
 => Scnario Based Question: https://medium.com/@RichaShukla2111/senior-level-java-interview-questions-series-2026-part-1-scenario-based-questions-3c757b4df428
+
+=> "final is a keyword used to restrict modification, finally is a block that always executes after try-catch for cleanup, and finalize() is a deprecated method invoked by the garbage collector before 
+reclaiming an object."
+=> Stack memory is used for method execution and stores local variables in a LIFO structure, making it fast and thread-safe. Heap memory is used for dynamic object allocation and is managed by the 
+garbage collector. This separation is important because it balances performance (fast execution via stack) with flexibility (dynamic objects in heap), while also supporting multithreading and efficient 
+memory management.
+=> “In microservices, ‘pause’ typically refers to temporarily stopping or throttling request processing to protect the system. This can be implemented at different layers—API gateway for rate limiting, 
+circuit breakers to stop calls to failing services, message consumers pausing consumption (e.g., Kafka), or service-level graceful shutdown. It’s part of resilience design to prevent cascading failures.”
+
+Feature	     List	    Set	                   Map
+Structure	Sequence	Unique collection	   Key-value
+Duplicates	✅ Allowed	❌ Not allowed	      ❌ Keys unique
+Order	    ✅ Yes	        Depends            Depends
+Access	    Index-based	   No index	           Key-based
+Use case	Ordered data	Unique items	   Fast lookup
+
+Operation	                ArrayList	                    LinkedList
+Insert at end	           ✅ Fast (amortized O(1))	        ✅ O(1)
+Insert at start	           ❌ Slow (O(n))	                ✅ O(1)
+Insert in middle	       ⚠️ O(n)	                       ⚠️ O(n)
+Memory	                   Compact                      	Heavy (nodes + pointers)
+Real-world performance	   ⭐ Better	                    Rarely better
+
+=> No, arrays in Java cannot grow dynamically. Even if size is not explicitly mentioned, it is determined at initialization time (like with array literals). To increase size, a new array must be created and
+elements copied. For dynamic resizing, ArrayList should be used.
+
+🔥 Final comparison
+Operation	             Array / ArrayList  	 LinkedList
+Find by index           	✅ O(1)             	❌ O(n)
+Search by value	          ⚠️ O(n) (fast)	     ⚠️ O(n) (slow)
+Real-world performance	  ⭐ Better	             ❌ Worse
+
+A real-world example of thread starvation is when a microservice uses a fixed thread pool and all threads get blocked waiting for slow downstream services like payment or database calls. New requests cannot get 
+a thread and may wait indefinitely, leading to high latency or timeouts. This happens even if CPU is idle, making it tricky to diagnose. It can be mitigated using timeouts, circuit breakers, non-blocking I/O, or
+proper thread pool design.
+
+Syncronized - real world example: System Status = Database, Gateway, License, Server
+
+In Java, a memory leak means: Objects are unintentionally kept alive in heap memory and never become eligible for GC.
+
+This leads to:
+    - increasing heap usage
+    - slow performance
+    - eventually OutOfMemoryError
+
