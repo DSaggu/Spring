@@ -1,0 +1,29 @@
+Role Authorization:
+
+Spring has inbuilt interface and classes which are being used for Spring Security.
+- GrantedAuthority implemeented by SimpleGrantedAuthority 
+
+@PreAuthoriz, @Secured, 
+@PostAuthorize = to filter return objects based on role
+
+E.g: 
+@PostAuthorize("returnedObject.owner == authentication.nam")
+public Report getReport(Long reportId) {
+    return report;
+}
+
+@Prefilter and @PostFilter = filter collections or arrays passed as method agruments or returned by method 
+
+Two ways:
+
+1. Method level Security =
+- Flexible, 
+- ideal for detailed control and complex conditions
+-Tightly coupled with business logic
+
+2. Request matchers approach
+- URL based 
+- ideal for simple and maintainable URL-based security
+- Less granularity to method-level security
+
+=> can use Combination of both 
