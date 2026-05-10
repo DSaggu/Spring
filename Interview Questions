@@ -31,3 +31,45 @@ It uses AutoConfigurationImportSelector to load predefined configuration classes
 
 Ques: How to secure rest API ?
 Ans: https://www.freecodecamp.org/news/what-are-json-web-tokens-jwt/?utm_source=sp_auto_dm&utm_referrer=sp_auto_dm&fbclid=PARlRTSARiXOVleHRuA2FlbQIxMABzcnRjBmFwcF9pZA8xMjQwMjQ1NzQyODc0MTQAAaeeat2Alf1qOKULnTjBVZpujhv7FpL7DtmdMiShhWkEA20qpIeqqb5yFGtGrw_aem_-1Ism6ugYTRqfW8z3PUMtA
+
+TCS:
+Ques: Given list of Employee table. Find employee with 2nd highest salary ?
+Ans: Optional<Employee> secondHighestSalaryEmployee =
+                employees.stream()
+                        .sorted(Comparator.comparing(Employee::getSalary).reversed())
+                        .skip(1)
+                        .findFirst();
+
+        secondHighestSalaryEmployee.ifPresent(System.out::println);
+
+Important Interview Follow-up
+
+The above solution works, but if duplicate max salaries exist (Alice and David both have 7000), then skipping 1 may still return another employee with the same highest salary.
+
+A better approach for 2nd distinct highest salary:
+
+Optional<Double> secondHighestSalary =
+        employees.stream()
+                .map(Employee::getSalary)
+                .distinct()
+                .sorted(Comparator.reverseOrder())
+                .skip(1)
+                .findFirst();
+
+secondHighestSalary.ifPresent(System.out::println);
+
+If you want the employee(s) having the 2nd highest distinct salary:
+
+Optional<Double> secondHighestSalary =
+        employees.stream()
+                .map(Employee::getSalary)
+                .distinct()
+                .sorted(Comparator.reverseOrder())
+                .skip(1)
+                .findFirst();
+
+if (secondHighestSalary.isPresent()) {
+    employees.stream()
+            .filter(e -> e.getSalary() == secondHighestSalary.get())
+            .forEach(System.out::println);
+}
