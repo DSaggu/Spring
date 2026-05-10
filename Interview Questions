@@ -73,3 +73,101 @@ if (secondHighestSalary.isPresent()) {
             .filter(e -> e.getSalary() == secondHighestSalary.get())
             .forEach(System.out::println);
 }
+
+Both int[] and int... represent arrays internally, but varargs provides syntactic 
+flexibility by allowing variable number of arguments without explicitly creating an array, while int[] requires explicit array construction.
+
+Although String... args is syntactically valid in Java and internally treated as String[], the JVM strictly requires public static void main(String[] args) as the entry point, 
+so varargs cannot be used for the main method.
+
+===== Java Literals: =====
+===> Octal = 0
+In Java, any integer literal starting with 0 is treated as octal, and digits 8 and 9 are not allowed in octal representation, so int i = 09 is invalid.
+
+Leading Zero Octal Trap:
+
+int a = 010;
+System.out.println(a);  8 because 010 is octal (base 8) => 1×8 + 0 = 8
+
+2. Invalid Octal Digit
+int b = 09; // ❌
+Result:
+
+Compile-time error
+Because octal allows only 0–7.
+
+==> Hexadecimal = Ox 
+int c = 0x10;
+System.out.println(c); 
+
+Hex = base 16
+0x10 = 1×16 + 0 = 16
+
+==> Binary Literal (0b)
+int d = 0b1010;
+System.out.println(d); 10
+
+==> System.out.println('A' + 1); = 65 (ascii) + 1 = 66
+
+Rehashing in HashMap occurs when the number of entries exceeds the threshold defined by capacity × load factor. During rehashing, the internal array size is doubled and all existing entries are 
+redistributed into new buckets using recomputed indices. This operation is expensive (O(n)), which is why pre-sizing and appropriate load factor tuning are important in high-performance systems.
+
+StringBuilder can be used as a key in HashMap because it inherits Object’s hashCode and equals, but it is a bad practice because it is mutable; any change after insertion breaks hash consistency 
+and leads to retrieval failure.
+
+======= Immutable List of Objects =====
+--- Which One to Use?
+-- Use List.copyOf()
+
+When:
+You want true immutability
+You want defensive copying
+Building immutable DTO/domain objects
+
+Best for immutable classes.
+
+-- Use Collections.unmodifiableList()
+When:
+You only want read-only access
+Internal list may still change
+
+E.g.
+Immutable class = final, does not contain setter methods
+if child objects are immutable:
+addresses = List.copyOf(addresses) => in constructor
+
+If child objects are mutable
+addresses = Collectins.unmodifiableList(addresses) => in constructor
+And return deep copy in getAddresses();
+
+==== Spring Circular Dependency ===
+The best way to avoid circular dependency is redesigning the services to remove tight coupling. If unavoidable, Spring provides options like @Lazy, setter injection, or ObjectProvider, 
+but constructor injection with proper design is preferred.
+
+@RequestScope creates one bean instance per HTTP request. The bean exists only for the duration of that request and is commonly used for request-specific state like user context or correlation IDs.
+@RequestScope works only in:
+- web applications
+- active HTTP request context
+
+-> Even though we only include spring-boot-starter-data-jpa, Hibernate is pulled in transitively as the default JPA provider, which is why we don’t need to explicitly add it.
+ employeeRepository.save() -> SimpleJpaRepository -> EntityManager (persist/merge) -> Hibernate Session -> Persistence Context (1st level cache) -> Flush -> SQL (INSERT/UPDATE) -> JDBC -> Database Commit
+
+-> When save() is called, Spring Data JPA delegates to SimpleJpaRepository, which uses EntityManager to either persist() or merge() the entity. Hibernate then manages the entity in the persistence context, 
+generates SQL during flush, and executes it via JDBC inside a transaction.
+
+-> Lazy loading fails without a transaction because Hibernate requires an open persistence context to fetch associated entities. When the session is closed after the repository method, accessing a lazy property 
+triggers LazyInitializationException since Hibernate cannot initialize the proxy without an active session.
+Lazy loading does NOT survive beyond @Transactional unless OSIV is enabled — which is why DTOs or fetch joins are preferred in real systems.
+
+-> JPA annotations are used to map Java objects to database tables and define relationships, constraints, and lifecycle behavior. The most important ones include @Entity, @Id, @OneToMany, @ManyToOne, and
+@JoinColumn, @FetchType, @Cascade
+
+-> If a legacy system uses Hystrix, the modern approach is to migrate to Resilience4j, preferably via Spring Cloud Circuit Breaker abstraction. Migration is done gradually by wrapping service calls, replacing 
+@HystrixCommand with @CircuitBreaker, and eventually removing Hystrix dependencies, ensuring zero downtime and backward compatibility.
+Hystrix = heavy old framework, @CircuitBreaker = lightweight modern pattern implementation with bilkhead pattern.
+
+Ques: How do you secure configs ?
+Ans: Spring cloud config server - configurations on GitHub repository
+ -> external provide AWS Secrets Manager
+
+
