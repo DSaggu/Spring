@@ -131,14 +131,28 @@ When:
 You only want read-only access
 Internal list may still change
 
+Immutable = An object whose state cannot be changed after it is created.
+
 E.g.
 Immutable class = final, does not contain setter methods
 if child objects are immutable:
-addresses = List.copyOf(addresses) => in constructor
+addresses = List.copyOf(addresses) => in constructor. It creates defensive copy automatically inside so need to create new ArrayList as down in Collections.unmodifiableList
 
 If child objects are mutable
+
+public Employee(String name, List<Address> addresses) {
+    this.name = name;
+
+    this.addresses = Collections.unmodifiableList( // prevents internal modification
+            new ArrayList<>(addresses) // defensive copy
+    );
+}
+-- another  way
 addresses = Collectins.unmodifiableList(addresses) => in constructor
-And return deep copy in getAddresses();
+And return deep copy in getAddresses() if Address is not immutable otherwise it can be modified through setter methods by accessing through soft copy.
+
+new ArrayList<>(addresses) is a shallow copy because it only copies the list structure but not the objects inside it. 
+Both original and copied lists still reference the same objects. A deep copy requires creating new instances of each element inside the list as well.
 
 ==== Spring Circular Dependency ===
 The best way to avoid circular dependency is redesigning the services to remove tight coupling. If unavoidable, Spring provides options like @Lazy, setter injection, or ObjectProvider, 
@@ -170,4 +184,70 @@ Ques: How do you secure configs ?
 Ans: Spring cloud config server - configurations on GitHub repository
  -> external provide AWS Secrets Manager
 
+Ques: “How do we create exactly TWO instances of a bean?”
+Ans: Now Spring container has exactly two beans.
 
+@Configuration
+public class AppConfig {
+
+    @Bean
+    public MyService service1() {
+        return new MyService("INSTANCE-1");
+    }
+
+    @Bean
+    public MyService service2() {
+        return new MyService("INSTANCE-2");
+    }
+}
+
+- List Injection: 
+@Autowired
+private List<MyService> services;
+
+- Manual Injection:
+@Autowired
+@Qualifier("service1")
+private MyService s1;
+
+@Autowired
+@Qualifier("service2")
+private MyService s2;
+
+-- No, Spring singleton beans are not thread-safe by default because multiple threads access the same shared instance concurrently. 
+Thread safety depends on whether the bean maintains mutable shared state. Stateless beans are safe, but stateful singleton beans require synchronization or redesign.
+
+Ques: How would you analyze logs for non-working pod ?
+Ans: First I would identify the failed pod using kubectl get pods, then inspect it using kubectl describe pod to check events, restart reason, probe failures, or OOM issues. Next I would analyze logs using kubectl logs and kubectl logs --previous if the container restarted. Since other pods are healthy, I would compare logs and configurations with a healthy pod to isolate whether the issue is pod-specific or application-wide. I would also check node health, resource utilization, deployment changes,
+and centralized logging systems like ELK or Datadog for deeper analysis. If it's a microservices environment, I’d also use distributed tracing to identify downstream failures.
+
+Ques: HashSet uses HashMap internally ? Then why we need HashSet ?
+Ans: HashSet should not be used when ordering is required, when duplicates are meaningful, when predictable performance or low memory overhead is critical, or 
+when working with mutable objects that can break hash-based contracts. It is also not suitable in concurrent write-heavy environments without external synchronization or concurrent alternatives.
+- HashSet has uniqueness, code clarity, enforces correct usage semantics, and prevents misuse of dummy values, allows one null value
+- HashMap = example caching. Easy access using index. One null key, many null values
+
+Example: API request deduplication
+  Set<String> processedRequestIds = new HashSet<>();
+  Why HashSet is correct:
+  
+  You only care about:
+  
+  Has this request ID been seen before?
+  Yes / No
+
+Ques: Why NOT HashMap here:
+Map<String, Boolean> map = new HashMap<>();
+
+  Problems:
+  
+  meaningless value (Boolean is fake)
+  extra memory overhead
+  unclear intent
+  
+  👉 This is a pure set problem, not a mapping problem.
+  
+  Real systems:
+  preventing duplicate payments
+  avoiding duplicate Kafka event processing
+  caching “already processed user IDs”
