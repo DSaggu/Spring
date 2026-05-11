@@ -297,3 +297,18 @@ where high throughput and scalability are more important than strict relational 
 Ques: What is spring boot starter ?
 Ans: A Spring Boot starter is a predefined dependency that bundles all required libraries for a specific functionality like web, JPA, or security. It simplifies dependency management and enables auto-configuration, 
 allowing developers to quickly build applications without manually managing individual dependencies.
+
+Ques: How conditional works ?
+Ans: Page number 242 in book.
+
+Ques: Composite key and how do you implement in JPA ?
+Ans: @Embaddable with @EmbeddedId (Guide to clear Java)
+
+Ques: Find customer who has more than one order. You are given Cutomer and Order table ?
+Ans: Select c.first_name, c.last_name
+     from Customer c inner join Order
+     on c.id = o.customer_id
+     group by c.customer_id, c.first_name, c.last_name
+     having count(o.customer_id) > 1;
+
+DB question: https://medium.com/@kaurharjeet122/the-sql-question-that-eliminates-7-out-of-10-java-candidates-7d0dff75167d
