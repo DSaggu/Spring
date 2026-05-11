@@ -140,3 +140,14 @@ HikariCP is fast because:
 - Uses optimized concurrent queue
 - Minimal object allocation
 - Very low lock contention design
+
+Ques: How GC works ?
+Ans: Mark and Sweep. After this live objects got into continuous memory location to avoid fragmentation.
+Stack - store reference to objects
+Heap - Young = short lived objects  (minor GC). Fast and fractional
+            -> Eden = new created object kept here. Its small and get full easily.
+           -> S0, S1 = surviving space. Either S0 and S1 will memory. An
+         When Eden space is full and GC runs. It will remove non-referenced objects and will move surviving objects to S0.
+         Next time GC runs, surviving objects get into S1. S0 and Eden both becomes empty
+         Object moves from S0 to S1 (vice-verca) = survived one generation. After 5 generations it gets to heap.
+       Old = surviving objects lives here. GC comes here only if needed (Major GC). Slow and may take seconds.    
