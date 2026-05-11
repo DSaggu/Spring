@@ -151,3 +151,149 @@ Heap - Young = short lived objects  (minor GC). Fast and fractional
          Next time GC runs, surviving objects get into S1. S0 and Eden both becomes empty
          Object moves from S0 to S1 (vice-verca) = survived one generation. After 5 generations it gets to heap.
        Old = surviving objects lives here. GC comes here only if needed (Major GC). Slow and may take seconds.    
+
+Ques: Difference between Callable and Runnable ?
+Ans: Runnable is used for tasks that do not return a result, while Callable is used for tasks that return a value and can throw checked exceptions. Runnable has a run() method returning void,
+whereas Callable has a call() method returning a value. Callable is typically used with ExecutorService and Future for asynchronous processing.
+
+Ques: Synchronized vs ReentrantLock ?
+Ans: synchronized is simpler and safer, whereas ReentrantLock is preferred for complex concurrent applications requiring greater control over locking behavior.
+- have to unlock in finally block
+- Fairness
+
+Ques: ThreadLocal real world scenario ?
+Ans: Each thread has its own copy or ThreadLocal variable. Basically used in request scope. For instance,, requestId, userId, Coorelation Id.
+Frameworks like Spring internally use ThreadLocal for transaction management and security context handling. Need to remove this otherwise can cause memory leaks.
+private static ThreadLocal<Connection> connectionHolder = new ThreadLocal<>();
+
+Ques: What is AOP ?
+Ans: https://www.youtube.com/watch?v=3rrPw-cbv_M
+
+Ques:Cusom ThreadPoolExecutor ? 
+Ans: Custom ThreadPoolExecutor (Most Important for Senior Interviews)
+
+Underlying implementation behind Executors.
+
+Example: ExecutorService executor =
+    new ThreadPoolExecutor(
+        2,                      // core pool size
+        5,                      // max pool size
+        60,                     // keep alive time
+        TimeUnit.SECONDS,
+        new LinkedBlockingQueue<>(100)
+    );
+1. First understand ThreadPoolExecutor behavior
+
+ThreadPoolExecutor
+
+It has 4 key components:
+
+    corePoolSize → minimum threads kept alive
+    maxPoolSize → maximum threads allowed
+    workQueue → queue for waiting tasks
+    rejection policy → what to do when overloaded
+
+2. What happens when a new task arrives?
+Execution flow:
+1. If active threads < corePoolSize → create new thread
+2. Else → try to add task to queue
+3. If queue is full → create new thread (up to maxPoolSize)
+4. If maxPoolSize reached AND queue is full → REJECTION
+
+Ques: We can use swagger for Rest API ?
+Ans: <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        <version>2.5.0</version>
+    </dependency>
+
+“Microservices = independent deployment + independent scaling + isolated failure + faster delivery + obserbality + fault tolerance”
+
+“2PC = prepare + commit, 3PC = prepare + precommit + commit, but modern systems use Saga instead.”
+
+2 Phase Commit = Transaction Coordinator controls commit/rollback strategies. use atomic rollback, eventual consistency
+Orchestrator = controls business flow, compensating actions, strong consistency
+
+Advantages: 
+Feature	      Orchestration	    Choreography
+Control     Centralized	        Decentralized
+Coupling	    Medium	         Low
+Debugging	    Easy	          Difficult
+Scalability	      Moderate	      High
+Failure handling	Centralized  	Distributed
+Best use case	Complex workflows	Event-driven systems
+
+Ques: How to configure Zipkins ?
+Ans: 1. Run Zipkin server
+2. Add dependencies 
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-sleuth</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+</dependency>
+In Spring Boot 3+, Sleuth is replaced by Micrometer Tracing, but concept remains same.
+
+Configure Zipkin:
+spring:
+  application:
+    name: order-service
+
+  zipkin:
+    base-url: http://localhost:9411
+
+  sleuth:
+    sampler:
+      probability: 1.0   # 100% tracing (for dev)
+
+“Zipkin = trace request journey across microservices with traceId + spanId(within one microservice).”
+
+Ques: Difference between Deployment and service mesh in Kubernetes ?
+Ans: Kubernetes Deployment manages the lifecycle of application pods including scaling, updates, and rollbacks. Service Mesh operates at the networking layer between services, 
+providing advanced capabilities like traffic routing, retries, circuit breaking, security (mTLS), and observability. They are complementary, not competing technologies.
+
+Ques: What is ConfigMap in kubernetes ?
+Ans: A ConfigMap in Kubernetes is used to store non-sensitive configuration data in key-value format and inject it into pods at runtime as environment variables DB URL
+service endpoints, logging level, feature toggles or mounted files. 
+It allows applications to separate configuration from code, making deployments more flexible and environment-independent.
+But passwords and tokens are stored in secrets like configuration server and AWS Secret 
+“Secrets in AWS go to Secrets Manager, configs go to Parameter Store, encryption is handled by KMS, and access by IAM.”
+
+- Mock = fake object (no real behavior)
+- Spy = partial real object (real + overridden behavior)
+
+Ques: How to configure Apache Kafak ?
+Ans: Udemy
+
+Ques: How to configure message delivery in Apache kafka ?
+Ans: Message delivery in Kafka is guaranteed using at-least-once or exactly-once semantics. At-least-once is achieved using acks=all, retries, replication, and manual offset commits. Exactly-once is
+achieved using Kafka transactions with idempotent producers and transactional consumers. Additionally, retry mechanisms and dead letter queues ensure no message is lost even in failure scenarios.
+
+ack = all means The producer waits until ALL in-sync replicas (ISR - replicas that are fully synced in leader followr partitions) acknowledge the message before marking it as successful. Ensures durability 
+even broker fails. If there is no confirmation message will not be committed.
+
+Ques: Difference between index and composite index ?
+Ans: “Index = one column lookup, Composite index = multi-column ordered lookup.”
+Composite Index = Here lookup depends on column order. E.g.
+
+Efficient:
+WHERE email = 'a@gmail.com'
+WHERE email = 'a@gmail.com' AND phone = '123'
+
+Not Efficient:
+WHERE phone = '123'
+
+Ques: What is executition plan in DB ?
+Ans: An execution plan is the strategy generated by the database query optimizer that defines how a SQL query will be executed. It includes details like whether an index scan or full table scan will be used, 
+join methods, and estimated cost. It helps improve query performance by showing how data is accessed internally.
+
+Ques: Benefits of NoSQL over SQL ?
+Ans: NoSQL databases provide benefits such as flexible schema, horizontal scalability, high availability, and better performance for large-scale and unstructured data. They are designed for distributed systems 
+where high throughput and scalability are more important than strict relational consistency.
+
+Ques: What is spring boot starter ?
+Ans: A Spring Boot starter is a predefined dependency that bundles all required libraries for a specific functionality like web, JPA, or security. It simplifies dependency management and enables auto-configuration, 
+allowing developers to quickly build applications without manually managing individual dependencies.
