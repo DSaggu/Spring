@@ -134,7 +134,7 @@ Internal list may still change
 Immutable = An object whose state cannot be changed after it is created.
 
 E.g.
-Immutable class = final, does not contain setter methods
+Immutable class = final, does not contain setter methods, final fields
 if child objects are immutable:
 addresses = List.copyOf(addresses) => in constructor. It creates defensive copy automatically inside so need to create new ArrayList as down in Collections.unmodifiableList
 
