@@ -115,3 +115,28 @@ Now filter runs.
         .filter(e -> e.getSalary() > 1000)
         .findFirst();
  - stop as soon as the first element is found. Do not process over entire list.
+
+==> Can connection pooling improve query performance?
+❌ Trick answer: No
+✅ Correct answer:
+
+Pooling does NOT improve query execution time.
+
+It improves:
+
+Connection acquisition latency
+Throughput under load
+Resource reuse efficiency
+
+Ques: Difference between HikariCP, Apache DBCP, and C3P0?
+✅ Answer:
+Pool	Key Feature             	Verdict
+C3P0	Old, heavy, feature-rich	❌ Not recommended
+DBCP	Stable but slower	⚠️ Legacy systems
+HikariCP	Lightweight, fast, minimal overhead	✅ Industry standard
+
+HikariCP is fast because:
+
+- Uses optimized concurrent queue
+- Minimal object allocation
+- Very low lock contention design
