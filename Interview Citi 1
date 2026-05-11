@@ -1,0 +1,117 @@
+@RequestBeanScope = You want a new bean instance for every HTTP request.
+
+So:
+one user request → one bean object
+next request → new bean object
+
+Use case:
+1. logged-in user info
+2. request metadata
+3. correlation ID
+4. Multi-tenant request resolution
+5. Request-specific caching
+
+Suppose multiple service calls in same request need same expensive data.
+
+Instead of hitting DB repeatedly:
+
+@Component
+@RequestScope
+public class RequestCache {
+
+    private Map<String, Object> cache = new HashMap<>();
+
+    public Object get(String key) {
+        return cache.get(key);
+    }
+
+    public void put(String key, Object value) {
+        cache.put(key, value);
+    }
+}
+
+Ques: What interceptors can be processed before reaching to controller layer ?
+Ans: Filters = infrastructure-level. BEFORE DispatcherServlet and AFTER response returns
+Interceptors = Works AFTER DispatcherServlet but BEFORE controller. Example role authorization, locale handling etc.
+
+@Component
+public class AuthInterceptor implements HandlerInterceptor {
+
+    @Override
+    public boolean preHandle(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Object handler) {
+
+        System.out.println("Before controller");
+
+        return true;
+    }
+}
+
+Register Intercepter:
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private AuthInterceptor interceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(interceptor);
+    }
+}
+=> Famous JPA annotations include entity mapping annotations like @Entity, @Table, @Id, and @Column; relationship annotations such as @OneToMany, @ManyToOne, and @JoinColumn; lifecycle and concurrency annotations like 
+@Version; and embedding/inheritance annotations such as @Embedded, @Embeddable, and @Inheritance. These annotations define how Java objects are mapped and managed in relational databases.
+
+Client Request -> Servlet Filters -> DispatcherServlet -> HandlerInterceptor -> Controller
+
+=> @Param in Spring Data JPA is used to Bind method parameters to named parameters inside JPQL or native SQL queries. It improves:
+- readability
+- parameter mapping
+- maintainability
+
+Example without @Param
+@Query("SELECT e FROM Employee e WHERE e.name = ?1")
+Employee findByName(String name); -> Uses positional parameter (?1).
+
+Example with @Param (recommended)
+@Query("SELECT e FROM Employee e WHERE e.name = :name")
+Employee findByName(@Param("name") String name);
+
+Ques: Difference between JPQL and HQL ?
+Ans: HQL = specific to Hibernate. And it has more features as compared to JPQL. For instance, database funciton, map funciton
+E.g. select new map(e.name as name, e.salary as salary) from Employee e
+
+Ques: Where do you store secrets ?
+Ans: Environment Variables, AWS Secrets Manager, Kubernetes Secret, externalized Configuration server.
+
+@Configuration = uses CGLIB proxy to return same singleton object. If we replace @Configuration with @Component it becomes normal method call and returns new object every time.
+
+===== EPAM round =========
+List<Employee> updatedList = employees.stream()
+        .map(e -> new Employee(
+                e.getName(),
+                e.getSalary() * 1.10
+        ))
+        .collect(Collectors.toList());
+
+Ques: What is lazy evaluation in terms of intermediate and terminal function in stream ?
+Ans: Intermediate operations are not executed immediately. They are only executed when a terminal operation is called.
+
+E.g. Example: lazy evaluation in action
+Stream<Employee> stream = employees.stream()
+        .filter(e -> {
+            System.out.println("filter " + e.getName());
+            return e.getSalary() > 1000;
+        });
+Nothing prints yet.
+
+stream.forEach(System.out::println);
+Now filter runs.
+
+==> Short-circuit example
+ employees.stream()
+        .filter(e -> e.getSalary() > 1000)
+        .findFirst();
+ - stop as soon as the first element is found. Do not process over entire list.
