@@ -1,0 +1,191 @@
+1. Use Mono
+Ans: Add dependency...
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
+
+@Configuration
+public class WebClientConfig {
+
+    @Bean
+    public WebClient webClient() {
+        return WebClient.builder().build();
+    }
+}
+
+public class UserOrderResponse {
+
+    private UserResponse user;
+    private OrderResponse order;
+
+    public UserOrderResponse(UserResponse user,
+                             OrderResponse order) {
+        this.user = user;
+        this.order = order;
+    }
+
+    // getters setters
+}
+
+@Service
+public class UserService {
+
+    @Autowired
+    private WebClient webClient;
+
+    public Mono<UserOrderResponse> getUserAndOrders(Long userId) {
+
+        Mono<UserResponse> userMono =
+                webClient.get()
+                        .uri("http://localhost:8081/users/" + userId)
+                        .retrieve()
+                        .bodyToMono(UserResponse.class);
+
+        Mono<OrderResponse> orderMono =
+                webClient.get()
+                        .uri("http://localhost:8082/orders/" + userId)
+                        .retrieve()
+                        .bodyToMono(OrderResponse.class);
+
+        return Mono.zip(userMono, orderMono)   // runs both in parallel wait until both completes successfully, then combine results
+                .map(tuple -> new UserOrderResponse(
+                        tuple.getT1(),
+                        tuple.getT2()
+                ));
+    }
+}
+-- Spring WebFlux subscribes automatically when controller returns Mono.
+
+Another example:
+
+import reactor.core.publisher.Mono;
+
+import java.util.List;
+
+class User {
+
+    String name;
+
+    User(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+}
+
+class Order {
+
+    String item;
+
+    Order(String item) {
+        this.item = item;
+    }
+
+    @Override
+    public String toString() {
+        return item;
+    }
+}
+
+class Response {
+
+    User user;
+
+    List<Order> orders;
+
+    Response(User user, List<Order> orders) {
+        this.user = user;
+        this.orders = orders;
+    }
+
+    @Override
+    public String toString() {
+        return user + " -> " + orders;
+    }
+}
+
+class UserService {
+
+    Mono<User> getUser() {
+
+        return Mono.fromSupplier(() -> {
+
+            sleep(1000);
+
+            return new User("Bal");
+        });
+    }
+
+    private static void sleep(long ms) {
+
+        try {
+            Thread.sleep(ms);
+        } catch (Exception e) {
+        }
+    }
+}
+
+class OrderService {
+
+    Mono<List<Order>> getOrders() {
+
+        return Mono.fromSupplier(() -> {
+
+            sleep(2000);
+
+            return List.of(new Order("Item1"));
+        });
+    }
+
+    private static void sleep(long ms) {
+
+        try {
+            Thread.sleep(ms);
+        } catch (Exception e) {
+        }
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        UserService userService = new UserService();
+
+        OrderService orderService = new OrderService();
+
+        Mono<User> userMono = userService.getUser();
+
+        Mono<List<Order>> orderMono = orderService.getOrders();
+
+        Mono<Response> responseMono =
+                Mono.zip(userMono, orderMono)
+                        .map(tuple -> {
+
+                            User user = tuple.getT1();
+
+                            List<Order> orders = tuple.getT2();
+
+                            return new Response(user, orders);
+                        });
+
+        responseMono.subscribe(System.out::println);
+
+        sleep(5000);
+    }
+
+    private static void sleep(long ms) {
+
+        try {
+            Thread.sleep(ms);
+        } catch (Exception e) {
+        }
+    }
+}
+
+Reactor Netty creates Event Loop threads.
