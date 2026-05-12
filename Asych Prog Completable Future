@@ -1,0 +1,108 @@
+1. Add Dependency
+<dependencies>
+
+    <!-- REST APIs -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!-- For CompletableFuture async support -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-aop</artifactId>
+    </dependency>
+
+    <!-- Optional: WebClient -->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-webflux</artifactId>
+    </dependency>
+</dependencies>
+
+2. Configure Thread Pool
+
+@Configuration
+@EnableAsync
+public class AsyncConfig {
+
+    @Bean(name = "asyncExecutor")
+    public Executor asyncExecutor() {
+
+        ThreadPoolTaskExecutor executor =
+                new ThreadPoolTaskExecutor();
+
+        executor.setCorePoolSize(10);
+        executor.setMaxPoolSize(50);
+        executor.setQueueCapacity(100);
+
+        executor.setThreadNamePrefix("async-thread-");
+
+        executor.initialize();
+
+        return executor;
+    }
+}
+
+3. Create Rest Template
+@Bean
+public RestTemplate restTemplate() {
+
+    HttpComponentsClientHttpRequestFactory factory =
+            new HttpComponentsClientHttpRequestFactory();
+
+    factory.setConnectTimeout(3000);
+    factory.setReadTimeout(5000);
+
+    return new RestTemplate(factory);
+}
+
+@Service
+public class UserServiceClient {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Async("asyncExecutor")
+    public CompletableFuture<User> getUser(Long id) {
+
+        User user = restTemplate.getForObject(
+                "http://localhost:8081/users/" + id,
+                User.class);
+
+        return CompletableFuture.completedFuture(user);
+    }
+}
+
+4. Aggregate parallel requests
+
+@Service
+public class OrderService {
+
+    @Autowired
+    private UserServiceClient userServiceClient;
+
+    @Autowired
+    private PaymentServiceClient paymentServiceClient;
+
+    public OrderResponse getOrderDetails(Long id)
+            throws Exception {
+
+        CompletableFuture<User> userFuture =
+                userServiceClient.getUser(id);
+
+        CompletableFuture<Payment> paymentFuture =
+                paymentServiceClient.getPayment(id);
+
+        // wait for both
+        CompletableFuture.allOf(
+                userFuture,
+                paymentFuture
+        ).join();
+
+        User user = userFuture.get();
+        Payment payment = paymentFuture.get();
+
+        return new OrderResponse(user, payment);
+    }
+}
