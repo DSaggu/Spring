@@ -84,3 +84,6 @@ For example, I’ve built mock servers to remove external dependencies and verif
 
 Generally, inconsistent or environment-specific issues point to hardware, while deterministic failures indicate software bugs.
 
+Ques: Why is try catch expensive ?
+Ans: The expensive part is: Throwing and creating exceptions. This is a very important Java interview concept.
+
