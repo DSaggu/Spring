@@ -59,7 +59,7 @@ CompletableFuture.supplyAsync(() -> computation);
 
 => list.remove() throws ConcurrentModificationException during iteration if the list is being traversed using an iterator, because it breaks the iterator’s expected state; use iterator.remove() instead.
 => Scnario Based Question: https://medium.com/@RichaShukla2111/senior-level-java-interview-questions-series-2026-part-1-scenario-based-questions-3c757b4df428
-
+=> Reducing contention often improves performance more than adding CPU
 => "final is a keyword used to restrict modification, finally is a block that always executes after try-catch for cleanup, and finalize() is a deprecated method invoked by the garbage collector before 
 reclaiming an object."
 => Stack memory is used for method execution and stores local variables in a LIFO structure, making it fast and thread-safe. Heap memory is used for dynamic object allocation and is managed by the 
