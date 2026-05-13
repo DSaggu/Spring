@@ -16,3 +16,32 @@ Root<User> root = cq.from(User.class);
 cq.select(root).where(cb.gt(root.get("age"), 25));
 
 List<User> users = entityManager.createQuery(cq).getResultList();
+
+=> CascadeType.ALL propagates parent entity operations like persist, merge, and delete to child entities. orphanRemoval=true is different because it automatically deletes child entities when they are 
+removed from the parent collection. It is mainly used to prevent orphan records in one-to-many relationships where child entities should not exist independently.
+
+=> “Thread starvation occurs when some threads never get execution opportunities because other threads continuously occupy resources, often due to unfair scheduling or blocked thread pools. Thread 
+congestion occurs when too many threads compete for limited system resources like CPU or locks, causing excessive context switching and performance degradation. Starvation affects fairness, 
+while congestion affects overall throughput and latency.”
+
+Java/Spring Production Solutions
+Prevent Starvation
+fair ReentrantLock
+timeout handling
+avoid blocking tasks
+separate pools
+
+Prevent Congestion
+rate limiting
+circuit breaker
+bulkhead pattern
+bounded queues
+
+Example:
+
+ThreadPoolTaskExecutor
+
+with:
+
+maxPoolSize
+queueCapacity
