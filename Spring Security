@@ -27,3 +27,7 @@ Two ways:
 - Less granularity to method-level security
 
 => can use Combination of both 
+
+=> “To configure OAuth with Keycloak, we create a realm, client, users, and roles in Keycloak, then configure Spring Boot as an OAuth2 Resource Server using issuer-uri. 
+The client authenticates with Keycloak and receives a JWT access token. That token is sent in the Authorization header to the REST API. 
+Spring Security validates the JWT signature, issuer, and expiry using Keycloak public keys, then creates an authenticated security context for authorization.”
