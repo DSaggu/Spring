@@ -11,3 +11,22 @@
 after successful processing. In case of failure, messages are re-queued or moved to dead letter queues. This provides at-least-once delivery, and consumers must be idempotent to handle duplicates safely.”
 
 A binding is a relationship + routing rule between an exchange and a queue.
+
+Ques: When to use Kafka over ActiveMQ ?
+Ans: “Kafka is preferred over RabbitMQ when we need high-throughput, distributed event streaming with the ability to replay messages and retain event history for a longer time. It is better suited for event-driven architectures, 
+analytics pipelines, and log processing, whereas RabbitMQ is better for traditional message queuing and task-based communication.”
+
+Ques: How to configure kafka?
+Ans: spring.kafka.bootstrap-servers=localhost:9092
+
+spring.kafka.consumer.group-id=order-group
+spring.kafka.consumer.auto-offset-reset=earliest
+spring.kafka.consumer.key-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+spring.kafka.consumer.value-deserializer=org.apache.kafka.common.serialization.StringDeserializer
+
+spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
+spring.kafka.producer.value-serializer=org.apache.kafka.common.serialization.StringSerializer
+
+Kafka configuration in Spring Boot includes bootstrap servers for cluster connectivity, consumer group ID for load balancing and parallel processing, offset reset strategy to define 
+starting point for message consumption, and serializers/deserializers to convert between Java objects and Kafka’s byte format. These configurations enable producers and consumers to 
+communicate reliably with the Kafka cluster.
