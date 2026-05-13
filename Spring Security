@@ -31,3 +31,30 @@ Two ways:
 => “To configure OAuth with Keycloak, we create a realm, client, users, and roles in Keycloak, then configure Spring Boot as an OAuth2 Resource Server using issuer-uri. 
 The client authenticates with Keycloak and receives a JWT access token. That token is sent in the Authorization header to the REST API. 
 Spring Security validates the JWT signature, issuer, and expiry using Keycloak public keys, then creates an authenticated security context for authorization.”
+
+=> Youtube:
+1. https://www.youtube.com/watch?v=nhsdPVXhbHo
+2. https://www.youtube.com/watch?v=GCZv1kPRWkQ
+
+Ques: Why not authorization server shares the access token directly ?
+Ans: Because it can become accessible in the browser. 
+Authorization code is sent in the callback API and rest of the process takes place by backend server.
+Fetch Token API needs client secret as well as authorization code, and client secret is saved at BackEnd
+
+-> need to add oAuth2-client dependency
+-> add following values for Authorization server
+  client-id 
+  client-secret
+  authorization-grant-type: authorization_code
+  scope:
+     - profile
+     - email
+
+  provider:
+    authorization-api
+    token-api
+    user-profile-api
+
+Client Id and Client Secret is generated after registering client with authorization server.
+=> oAuth user information is saved in OAuth2
+  
