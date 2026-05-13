@@ -45,3 +45,23 @@ with:
 
 maxPoolSize
 queueCapacity
+
+=> Entity Manager is the interface defined by JPA, Session is the interface defined by Hibernate. Entity Manager is built on top of the Session, and it provides a simpler, more consistent interface for 
+working with JPA entities
+=> In the context of JDBC, a driver is a software component that provides the necessary functionality to connect to a specific type of database
+=> Helm is a package manager for Kubernetes used to simplify deployment and management of Kubernetes applications. It packages Kubernetes manifests into reusable charts, supports templating through values.yaml, 
+enables environment-specific configurations, versioning, upgrades, and rollback capabilities. Helm is widely used in CI/CD pipelines for deploying microservices consistently across environments.
+=> Pod Crash -> Kubelet detects failure -> Deployment notices replica mismatch -> New pod created
+
+Ques: Difference between Service and deployment in Kubernetes ?
+Ans: “A Deployment in Kubernetes is responsible for managing pod lifecycle, scaling, rolling updates, and maintaining the desired number of replicas. A Service is responsible for providing stable networking and 
+load balancing access to pods. Deployments manage application instances, while Services expose and route traffic to those instances.”
+
+“No, a pod is not limited to a single Kubernetes Service. Multiple Services can target the same pod using different label selectors or expose different ports and use cases. Services in Kubernetes are loosely coupled
+networking abstractions that select pods dynamically through labels rather than having a one-to-one relationship.”
+
+A Pod is the smallest deployable unit in Kubernetes and represents one or more tightly coupled containers running together on the same node. Containers inside a pod share networking, storage, and lifecycle. 
+Pods are ephemeral and are usually managed by higher-level controllers like Deployments or StatefulSets.
+
+Pods in Kubernetes are ephemeral, meaning they are temporary and can be created, destroyed, or replaced at any time. When a pod fails or is terminated, Kubernetes does not repair it but creates a new replacement 
+pod. This is why applications should not depend on pod identity, IP, or local storage, and instead use services and persistent storage for stability.
