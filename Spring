@@ -192,3 +192,6 @@ while remaining isolated from other threads.
 
 => I integrate Swagger in Spring Boot using springdoc-openapi starter dependency. It auto-generates OpenAPI documentation from controllers and exposes Swagger UI at /swagger-ui/index.html. 
 I enhance documentation using @Operation, @Tag, and configure OpenAPI bean for API metadata. If security is enabled, I explicitly whitelist Swagger endpoints.
+
+@Primary is used to mark a default bean when multiple beans of the same type exist, so Spring automatically selects it during autowiring. @Qualifier is used to explicitly specify which bean should be injected 
+at a particular injection point. If both are present, @Qualifier takes higher precedence, giving more fine-grained control compared to @Primary.
