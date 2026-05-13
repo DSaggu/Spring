@@ -71,6 +71,9 @@ Client Request -> Servlet Filters -> DispatcherServlet -> HandlerInterceptor -> 
 - parameter mapping
 - maintainability
 
+- Resilience4j does not explicitly provide a heuristic engine, but its components like Circuit Breaker, Retry, and Rate Limiter use rule-based decision logic based on thresholds and sliding window statistics. 
+These behave like heuristics because decisions are made using recent sampled data rather than complete system history, such as failure rate thresholds or token availability.
+
 Example without @Param
 @Query("SELECT e FROM Employee e WHERE e.name = ?1")
 Employee findByName(String name); -> Uses positional parameter (?1).
@@ -321,3 +324,6 @@ memory and workload characteristics. Modern systems can support hundreds of thou
 => Function<String, Integer> length = s -> s.length();
 => Consumer<String> print = s -> System.out.println(s);
 => Supplier<Double> random = () -> Math.random();
+
+=> “Request scope creates one bean instance per HTTP request. It is useful for request-specific state like correlation IDs or user context. Spring uses scoped proxies when injecting request-scoped beans into singleton
+beans because request beans are created dynamically per request.”
