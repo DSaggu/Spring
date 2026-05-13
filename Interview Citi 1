@@ -316,3 +316,8 @@ DB question: https://medium.com/@kaurharjeet122/the-sql-question-that-eliminates
 Ques: How many maximum virtual threads we can have ?
 Ans: Java virtual threads do not have a fixed maximum limit. Unlike platform threads, they are lightweight and managed by the JVM rather than mapped directly to OS threads. The practical limit depends mainly on available 
 memory and workload characteristics. Modern systems can support hundreds of thousands or even millions of virtual threads, especially for IO-bound applications. However, CPU-bound workloads and pinned threads reduce scalability.
+
+=> Predicate<Integer> isEven = n -> n % 2 == 0;
+=> Function<String, Integer> length = s -> s.length();
+=> Consumer<String> print = s -> System.out.println(s);
+=> Supplier<Double> random = () -> Math.random();
