@@ -87,3 +87,18 @@ Generally, inconsistent or environment-specific issues point to hardware, while 
 Ques: Why is try catch expensive ?
 Ans: The expensive part is: Throwing and creating exceptions. This is a very important Java interview concept.
 
+Database Indexing:
+1. We read execution plan from right to left and top to right.
+https://www.youtube.com/watch?v=YuRO9-rOgv4
+
+Clustered Index:
+=> Root Node  - Index Rows
+=> Intermediate nodes - Index Rows
+=> Leaf nodes = contain Table(Shot) data in pages sorted by primary id - Data Rows
+
+Non Clustered Index on name column:
+=> Root Node, Intermediate nodes = Key Values
+=> Leaf Nodes = Row Locators. => Stores name and clustered key
+
+Estimated Sub-tree cost : from execution plan.
+
