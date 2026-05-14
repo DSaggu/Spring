@@ -1,0 +1,34 @@
+Promise.all() 
+=> to handle multiple promises concurrently
+=> takes an array of promises as input parameter and returns single promise
+=> waits for all promises to resolve or at least one promise to reject
+
+Promise.race()
+=> will wait for one promise to resolve and reject.
+
+-------------------------------------------------------- Async/Await ----------------------------------------------------------------------
+=> It will make whole method non-blocking until async method is invoked.
+async function greet() {
+  try {
+  delay(2000);  // not block
+  console.log("starting.......");
+
+   await fetchData(); // Block the code until completion
+  } catch(error) {
+    console.error("Error ": error);
+  }
+  console.log("Blocked");
+}
+
+asynch function fetchData() {
+  try {
+    const response = await fetch("https://abc.com");
+    if(!response.ok) {
+        throw new Error("Request failed");
+     }
+  } catch(error) {
+     throw error;
+  }
+}
+
+=> try catch block is used to to handle the errors  
