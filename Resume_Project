@@ -65,3 +65,6 @@ FROM test_suite_device tsd
 JOIN device d
     ON d.id = tsd.device_id
 WHERE tsd.test_suite_id = 1;
+
+----
+Delete = We can delete data for test_suite by name. So, test_suite_name should be indexed.
