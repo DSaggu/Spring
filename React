@@ -1,0 +1,34 @@
+Ques: What is virtual DOM ?
+Ans: The Virtual DOM is a lightweight in-memory representation of the real DOM elements. React uses it to update the UI efficiently by calculating the difference (diffing) between
+the previous and the new virtual DOM and updating only the parts of the real DOM tha have changed.
+
+Ques: Explain the difference between state and props.
+Ans: Props: Passed from parent to child components, read-only, and cannot be modified by the receiving component.
+     State: Managed within a component, mutable, and used to store information that can change over time.
+
+Ques: What are controlled components?
+Answer: Controlled components are form elements (inputs, selects, etc.) where React manages the value. The component’s state holds the form value, and every input change is handled by an event handler.
+
+Ques: How does React handle reconcilation ?
+Ans: React uses a reconciliation algorithm to efficiently update the DOM. It compares the new virtual DOM with the previous one, calculates the minimum number of updates, and 
+batches changes to the real DOM.
+
+=> Babel converts JSX to JS using React.createComponent
+
+Ques: useCallBack and useMemo ?
+Ans: useCallback = https://www.youtube.com/watch?v=e4G_feMylbg
+ useMemo = https://www.youtube.com/watch?v=e4G_feMylbg
+PureComponent = https://www.youtube.com/watch?v=uLhQACqs3fI
+
+Ques: How can you optimize performance in React app ?
+Ans: Performance optimization strategies include:
+
+• Code-splitting with React.lazy().
+
+• Memoizing components with React.memo.
+
+• Debouncing or throttling events like input.
+
+• Using useMemo and useCallback to avoid unnecessary recalculations.
+
+• Implementing error boundaries and lazy loading.
