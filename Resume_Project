@@ -1,0 +1,67 @@
++----------------------+
+|      test_suite      |
++----------------------+
+| id (PK)              |
+| test_suite_name      |
++----------------------+
+           |
+           | 1 : MANY
+           |
+           v
++----------------------+
+|    test_suite_run    |
++----------------------+
+| id (PK)              |
+| test_suite_id (FK)   |
+| run_name             |
+| executed_at          |
++----------------------+
+           |
+           | 1 : MANY
+           |
+           v
++------------------------------+
+|     test_suite_run_data      |
++------------------------------+
+| id (PK)                      |
+| test_suite_run_id (FK)       |
+| shot_name                    |
+| total_rc_loading_time        |
++------------------------------+
+
+
++----------------------+
+|        device        |
++----------------------+
+| id (PK)              |
+| device_name          |
++----------------------+
+
+
+
+            MANY : MANY
++-----------------------------------+
+|         test_suite_device         |
++-----------------------------------+
+| id (PK)                           |
+| test_suite_id (FK)                |
+| device_id (FK)                    |
++-----------------------------------+
+
+------ Find average data for each shot ------
+SELECT ts.test_suite_name,
+       AVG(tsrd.total_rc_loading_time) AS avg_loading_time
+FROM test_suite_run_data tsrd
+JOIN test_suite_run tsr
+    ON tsr.id = tsrd.test_suite_run_id
+JOIN test_suite ts
+    ON ts.id = tsr.test_suite_id
+WHERE ts.id = 1
+GROUP BY ts.test_suite_name;
+
+----- Find Devices for each test_suite -------
+SELECT d.device_name
+FROM test_suite_device tsd
+JOIN device d
+    ON d.id = tsd.device_id
+WHERE tsd.test_suite_id = 1;
