@@ -108,3 +108,42 @@ Estimated Sub-tree cost : from execution plan.
 => O(N) -> O(logN)
 => used only read intensive
 
+2.Clustered Index
+- A clustered index determines the physical order of data in the table.
+- The actual table rows are stored in the same order as the clustered index.
+
+Characteristics:
+- Only ONE clustered index per table
+- Because data can only be physically ordered one way
+Usually created on: Primary Key
+
+A non-clustered index is a separate structure from the actual table data.
+
+It stores:
+- indexed column
+- pointer/reference to actual row
+
+Think of: book index pointing to page numbers
+
+First, I clearly understand the functional and non-functional requirements such as scalability, performance, availability, security, expected traffic, and integration needs.
+
+Then I decide the architecture style — usually layered monolith or microservices depending on domain complexity and scaling requirements.
+
+After that, I design the database schema and relationships, identify important queries, and plan indexes early to avoid performance bottlenecks later.
+
+Next, I define REST API contracts, request/response models, validation rules, and error handling standards.
+
+Then I create the Spring Boot project structure with proper separation of concerns such as controller, service, repository, DTO, entity, configuration, exception handling, and utility layers.
+
+I implement business logic in service layer, keep controllers thin, and use JPA or appropriate persistence strategy for data access.
+
+I also configure security using Spring Security with JWT/OAuth2 depending on requirements.
+
+For production readiness, I add centralized logging, monitoring, health checks, retries, circuit breakers, caching, and externalized configuration.
+
+Finally, I add unit/integration tests, containerize using Docker, configure CI/CD pipelines, and deploy to cloud/Kubernetes environments.
+
+Ques: How to retreive data efficiently ?
+Ans: Efficient data retrieval is usually a combination of proper indexing, optimized queries, caching, pagination, minimizing network overhead, and understanding access patterns. The best solution depends 
+on whether the system is read-heavy, write-heavy, transactional, or analytics-oriented.
+
