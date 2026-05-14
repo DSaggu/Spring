@@ -147,3 +147,7 @@ Ques: How to retreive data efficiently ?
 Ans: Efficient data retrieval is usually a combination of proper indexing, optimized queries, caching, pagination, minimizing network overhead, and understanding access patterns. The best solution depends 
 on whether the system is read-heavy, write-heavy, transactional, or analytics-oriented.
 
+Ques: Why we need JavaScript, TypeScript and React ?
+Ans: JavaScript is the core programming language. TypeScript improves JavaScript by adding static typing and compile-time validation, which is especially valuable in large applications. React, on the other hand, is a UI library that simplifies building dynamic and 
+maintainable user interfaces through component-based architecture and declarative rendering. React solves frontend complexity that plain JavaScript alone becomes difficult to manage at scale.
+
