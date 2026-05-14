@@ -88,6 +88,9 @@ Ques: Why is try catch expensive ?
 Ans: The expensive part is: Throwing and creating exceptions. This is a very important Java interview concept.
 
 Database Indexing:
+
+Indexing creates memory location and column is stored in sorting order. It will also get updated on write operation.
+
 1. We read execution plan from right to left and top to right.
 https://www.youtube.com/watch?v=YuRO9-rOgv4
 
@@ -101,4 +104,7 @@ Non Clustered Index on name column:
 => Leaf Nodes = Row Locators. => Stores name and clustered key
 
 Estimated Sub-tree cost : from execution plan.
+=> B-tree is used as 
+=> O(N) -> O(logN)
+=> used only read intensive
 
