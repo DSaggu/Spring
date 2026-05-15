@@ -4,7 +4,7 @@ the previous and the new virtual DOM and updating only the parts of the real DOM
 
 Ques: Explain the difference between state and props.
 Ans: Props: Passed from parent to child components, read-only, and cannot be modified by the receiving component.
-     State: Managed within a component, mutable, and used to store information that can change over time.
+     State: Managed within a component, mutable, and used to store information that can change over time. Child component can update state by passing callback functions as props.
 
 Ques: What are controlled components?
 Answer: Controlled components are form elements (inputs, selects, etc.) where React manages the value. The component’s state holds the form value, and every input change is handled by an event handler.
@@ -13,12 +13,66 @@ Ques: How does React handle reconcilation ?
 Ans: React uses a reconciliation algorithm to efficiently update the DOM. It compares the new virtual DOM with the previous one, calculates the minimum number of updates, and 
 batches changes to the real DOM.
 
-=> Babel converts JSX to JS using React.createComponent
+=> Babel tool converts JSX to JS using React.createComponent
 
 Ques: useCallBack and useMemo ?
-Ans: useCallback = https://www.youtube.com/watch?v=e4G_feMylbg
- useMemo = https://www.youtube.com/watch?v=e4G_feMylbg
-PureComponent = https://www.youtube.com/watch?v=uLhQACqs3fI
+Ans:  useMemo = https://www.youtube.com/watch?v=e4G_feMylbg
+useCallback = https://www.youtube.com/watch?v=tLvG7AGVO2c
+
+import React, { useState, useMemo, useCallback } from "react";
+
+export default function Dashboard() {
+  // multiple states
+  const [count, setCount] = useState(0);
+  const [text, setText] = useState("");
+  const [theme, setTheme] = useState("light");
+
+  // useMemo → derived/expensive value based on state
+  const computedValue = useMemo(() => {
+    console.log("Expensive calculation running...");
+    return count * 1000;
+  }, [count]);
+
+  // useCallback → memoized function
+  const handleIncrement = useCallback(() => {
+    setCount((prev) => prev + 1);
+  }, []);
+
+  const handleThemeToggle = useCallback(() => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  }, []);
+
+  return (
+    <div style={{ background: theme === "light" ? "#fff" : "#333", color: theme === "light" ? "#000" : "#fff" }}>
+      <h2>Dashboard</h2>
+
+      <div>
+        <button onClick={handleIncrement}>Increment</button>
+        <button onClick={handleThemeToggle}>Toggle Theme</button>
+      </div>
+
+      <div>
+        <input
+          placeholder="Type something..."
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+      </div>
+
+      <hr />
+
+      <p>Count: {count}</p>
+      <p>Computed Value (useMemo): {computedValue}</p>
+      <p>Text: {text}</p>
+      <p>Theme: {theme}</p>
+    </div>
+  );
+}
+
+PureComponent = Component only renders when its prop values change. Although it does shallow comparison of its prop values and do not work for arrays and object. Because it use === under hood to compare
+values of object. So, we write new funciton comparing prev and next value of object.
+
+https://www.youtube.com/watch?v=uLhQACqs3fI
 
 Ques: How can you optimize performance in React app ?
 Ans: Performance optimization strategies include:
@@ -32,3 +86,6 @@ Ans: Performance optimization strategies include:
 • Using useMemo and useCallback to avoid unnecessary recalculations.
 
 • Implementing error boundaries and lazy loading.
+
+Interesting things:
+1. React Security:  https://certificates.dev/blog/security-in-react-applications?utm_campaign=weekly&utm_content=Weekly+Newsletter+-+15+May+2026+-+EU/US+-+Not+Purchased&utm_medium=email_action&utm_source=cio&utm_term=certificatesdev
