@@ -89,3 +89,52 @@ Ans: Performance optimization strategies include:
 
 Interesting things:
 1. React Security:  https://certificates.dev/blog/security-in-react-applications?utm_campaign=weekly&utm_content=Weekly+Newsletter+-+15+May+2026+-+EU/US+-+Not+Purchased&utm_medium=email_action&utm_source=cio&utm_term=certificatesdev
+
+---- strict mode ----
+React Strict Mode is a development tool that helps you write safer, cleaner, and future-proof React code by highlighting potential issues early. For instance, useEffect runs twice, 2 api calls.
+
+------ Working with APIs in React -----
+=> mount componet means render component. So basically finds bug in development environment not by users.
+=> Pure function always return the same output for given same input with no side effects.
+
+Behaviour        Development                       Production
+Renders          Invoked Twice                     Invoked Once
+Effects          Mount -> Unmount -> Remount       Mount once
+Warnings         Active                            None 
+Performance      Checks enabled                    Fully optimized
+
+------- map function --- to iterate over array
+data.map((post) => (
+  <li key={post.id}>
+       <p> {post.title} </p>
+       <p> {post.body} </p>
+  </li>
+))
+
+----- AXIOS -----
+-> Promise based HTTP client for the browser and node.js
+-> It has concept of intercepters
+
+==> ...formData = destructure the form data
+=> e.preventDefault() = default behaviour on submit form with browser is page reload.
+
+------ React Hook Form ---------- helps to reduce boiler plate code, apply validations
+import { useForm } from "react-hook-form"
+
+const [register, handleSubmit, watch, formstate: {errors}] = useForm();
+
+<form onSubmit={handleSubmit(onSubmit)}>
+  <input {...register('name', {required: 'Name is missing', minLength: {value: 2, message: 'Names should be atleast 2 characters'}})}>
+</form>
+{erros.name && <p> {errors.name.message} </p>}
+
+---> watch function = watch values e.g. console.log(watch("shownName"))
+Real use case = conditional rendering of form based on value
+--> Validations = like required true.
+
+------ Comparison between basic form and React hook form -------
+1. Basic form is not good for performance because as it can render multiple times. But react hook form minimizing the rendering.
+
+----- Reset in React Hook Form ------
+=> reset() function in form. Use with rest click button
+
