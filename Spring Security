@@ -71,7 +71,7 @@ Key Terms:
 
 Three types:
 1. PKCE = For front end applications
-  - need OAuth server dependency in application
+  - need OAuth server dependency in application because spring acts as resource server.
   - Keycloak = 
     a. Creat Client 
       - Client Type = OpenID Connect
@@ -83,10 +83,22 @@ Three types:
   - Create ClientType, client ID, redirect URl (fromtend application), web origin (for CORS) 
 -> Create User with username/password 
 -> Gateway acts as resource server by adding oAuth2 resource dependency
+-> When sending request from PostMan user can configure new token by selecting Grant Type = PKCE, configuring Callback URL(redirect URL) etc.
+-> On server side using need to use converter - Spring Security filter roles from token for client ID. Then create authority(SimpleGrantedAuthority) by prefixing with "Role_".
+   - realm_access = global level role
+   - resource_access = client level role access
+   - Spring Security does not usually persist Keycloak roles server-side. It extracts roles from JWT claims, converts them into GrantedAuthority, and stores them temporarily
+     inside the Authentication object in the SecurityContextHolder for the current request/session.Without storing them, Spring would need to repeatedly parse the token and 
+     re-evaluate permissions everywhere. It can use .hasRole("ADMIN"), @PreAuthorize("hasRole('ADMIN')"). 
+     Spring needs a single authenticated user object accessible everywhere.
+
+     But it does not store in DB because JWT is stateless. Since JWT authentication is stateless, the server reconstructs the authentication object from the token on every 
+     request instead of permanently storing user roles in the database or session.
+
+     Incoming Request -> JWT Token Validated -> Roles extracted from token -> Authentication object created -> Stored in SecurityContext -> Controllers/services use it for authorization
 
   Spring configuratios:
   a. jwt.issuer-uri = take uri from OPen ID realm
-  b. 
 
 2. Client Credentials flow = machine to machine communication, server to server communication
 
