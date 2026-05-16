@@ -71,11 +71,31 @@ Key Terms:
 
 Three types:
 1. PKCE = For front end applications
+  - need OAuth server dependency in application
+  - Keycloak = 
+    a. Creat Client 
+      - Client Type = OpenID Connect
+      - ClientID = Give any client ID 
+      - Enable Standard flow and Direct access grants
+      - Redirect URL = URI for frontend application 
+
+-> User creates realm for each application(generally)
+  - Create ClientType, client ID, redirect URl (fromtend application), web origin (for CORS) 
+-> Create User with username/password 
+-> Gateway acts as resource server by adding oAuth2 resource dependency
+
+  Spring configuratios:
+  a. jwt.issuer-uri = take uri from OPen ID realm
+  b. 
+
 2. Client Credentials flow = machine to machine communication, server to server communication
 
 => Youtube:
 1. https://www.youtube.com/watch?v=nhsdPVXhbHo
 2. https://www.youtube.com/watch?v=GCZv1kPRWkQ
+
+@EnableWebSecurity secures traditional servlet-based Spring MVC applications using filters, while 
+@EnableWebFluxSecurity secures reactive Spring WebFlux applications using non-blocking WebFilters and Reactor context.
 
 Ques: Why not authorization server shares the access token directly ?
 Ans: Because it can become accessible in the browser. 
