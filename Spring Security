@@ -32,6 +32,47 @@ Two ways:
 The client authenticates with Keycloak and receives a JWT access token. That token is sent in the Authorization header to the REST API. 
 Spring Security validates the JWT signature, issuer, and expiry using Keycloak public keys, then creates an authenticated security context for authorization.”
 
+Realm = Group of users + apps. E.g. HR realms, Sales realm
+Client = application (Web, mobile, API) that connects to Keycloak for login
+Users = These are actiual users - Employees, Customers, Admins
+Roles = Roles define permission. Assign role to users per client.
+Identity Providers =  External login option. For instance, GitHub, Facebook
+Protocols = langiages Keyclock uses to talk to apps securly. These are OIDC(OpenID Connect) and SAML
+
+Authentication Protocls: When 2 different applications talk to each other they need to authenticate with each other.
+OIDC(OpenID connect) - Modern and used in most apps
+  - Built on top of OAuth2
+  - Uses JWT tokens
+  - Works with modern apps: React, Angular, Spring Boot, Node.js, mobile apps
+
+SAML - To integrate with older enterprise apps
+
+Need following properties to set in application:
+1. spring.security.oath2.client.registration.oauth2-authorization-code-flow.client-id=oauth2-authorization-code-flow // provided by keyalock
+2. spring.security.oath2.client.registration.oauth2-authorization-code-flow.client-secret=          // provided by keyalock
+3. spring.security.oath2.client.registration.oauth2-authorization-code-flow.scope=openid,profile,roles,email //permission
+4. spring.security.oath2.client.registration.oauth2-authorization-code-flow.autherization-grant-type=authorization_code
+5. spring.security.oath2.client.registration.oauth2-authorization-code-flow.redirect-uri=http://localhost:8080/login/oauth2/code/
+6. spring.security.oath2.client.provider.oauth2-authorization-code-flow.issuer-uri=Keylockuri
+
+OAuth = Open Authorization. Here no need to share username/password of google. Instead grant access to google and goggle will connect by access code.
+        It is needed to enable secure and easy access to user information by third-party applications without compromising user's credentials (like passwords).
+
+We can debug the access token on server side by placing debug on getTokenResponse() on DefaultAuthorizationCodeTokenResponseClient.java.
+-> accessToken and refreshToken both are shared by KeyAlock
+-> Spring Security stores information in OAuth2AuthenticationToken object.
+
+Key Terms:
+1. Resource owner (User) = person who owns the account
+2. Third-party application = This is the application that wants to access to your account
+3. Resource server = server that holds data application wants to access. E.g Google server
+4. Authorization server = server handles the authentication (loggin in) and authorization (granting permission)
+5. client 
+
+Three types:
+1. PKCE = For front end applications
+2. Client Credentials flow = machine to machine communication, server to server communication
+
 => Youtube:
 1. https://www.youtube.com/watch?v=nhsdPVXhbHo
 2. https://www.youtube.com/watch?v=GCZv1kPRWkQ
