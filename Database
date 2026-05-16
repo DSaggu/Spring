@@ -159,3 +159,6 @@ https://www.youtube.com/watch?v=79s1d16ZltU
 I identify DB connection issues by looking for connection timeout exceptions, pool exhaustion warnings, authentication failures, and network-related disconnects in logs. I also correlate application logs with connection pool metrics and database logs to determine 
 whether the issue is due to slow queries, leaked connections, infrastructure problems, or database availability.
 
+I increase DB connections gradually based on metrics rather than guessing. First I check whether the application is truly connection-starved or whether slow queries and long transactions are exhausting the pool. In most Spring Boot applications using HikariCP, a pool size 
+between 10 and 30 per instance is sufficient. Increasing connections beyond DB capacity can actually reduce throughput due to contention and context switching.
+
