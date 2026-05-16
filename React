@@ -1,3 +1,6 @@
+=> installed things go inside node_modules
+=> Update package.json file
+
 Ques: What is virtual DOM ?
 Ans: The Virtual DOM is a lightweight in-memory representation of the real DOM elements. React uses it to update the UI efficiently by calculating the difference (diffing) between
 the previous and the new virtual DOM and updating only the parts of the real DOM tha have changed.
@@ -18,6 +21,13 @@ batches changes to the real DOM.
 Ques: useCallBack and useMemo ?
 Ans:  useMemo = https://www.youtube.com/watch?v=e4G_feMylbg
 useCallback = https://www.youtube.com/watch?v=tLvG7AGVO2c
+
+Data from a child can be passed to the parent using a callback. This can be achieved by using the following steps.
+
+ ● Create a callback method in parent and pass it to the child using props.
+
+ ● Child can call this method using “this.props.[yourCallbackName]” form child and pass data as argument.
+https://medium.com/@ksonuraj1/react-masterclass-the-real-interview-questions-from-amazon-gojek-and-oyo-with-answers-8a2479b83f86
 
 import React, { useState, useMemo, useCallback } from "react";
 
@@ -135,6 +145,29 @@ Real use case = conditional rendering of form based on value
 ------ Comparison between basic form and React hook form -------
 1. Basic form is not good for performance because as it can render multiple times. But react hook form minimizing the rendering.
 
+--------------------- React Router -----------------------
+1. It is npm install react-router-dom@5
+2. routing in React is the process of displaying different components based on the URL. 
+3. Link is faster than anchor tag because anchor tag reloads the page.
+
 ----- Reset in React Hook Form ------
 => reset() function in form. Use with rest click button
 
+----- reset the component -------
+If you try to update the state of component directly, then it won’t re-render the component.
+// Wrong
+this.state.message = 'Hello world'
+//Correct
+ this.setState({ message: 'Hello World' })
+
+=> Mounting is the phase in which our React component mounts on the DOM (i.e., is created and inserted into the DOM).
+=> A Pure Component is a React component that prevents unnecessary re-renders by performing a shallow comparison of props and state, improving application performance.
+
+------ Reasons Behind Re-Rendering In React ------
+● Re-rendering of a component and its child components occurs when props or the state of the component has been changed.
+● Re-rendering components that are not updated, affects the performance of an application
+
+-------- Maintaining State Colocation -------------
+This is a process of moving the state as close to where you need it as possible. Sometimes in React app, we have a lot of unnecessary states inside the parent component which 
+makes the code less readable and harder to maintain. Not to forget, having many states inside a single component leads to unnecessary re-renders for the component. It is better 
+to shift states which are less valuable to the parent component, to a separate component.
