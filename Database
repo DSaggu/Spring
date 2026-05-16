@@ -155,3 +155,7 @@ maintainable user interfaces through component-based architecture and declarativ
 https://www.youtube.com/watch?v=-vKFxm9u68o
 https://www.youtube.com/watch?v=79s1d16ZltU
 
+--------- Database Connection Pooling --------------
+I identify DB connection issues by looking for connection timeout exceptions, pool exhaustion warnings, authentication failures, and network-related disconnects in logs. I also correlate application logs with connection pool metrics and database logs to determine 
+whether the issue is due to slow queries, leaked connections, infrastructure problems, or database availability.
+
