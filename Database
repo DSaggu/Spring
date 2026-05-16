@@ -151,6 +151,7 @@ Ques: Why we need JavaScript, TypeScript and React ?
 Ans: JavaScript is the core programming language. TypeScript improves JavaScript by adding static typing and compile-time validation, which is especially valuable in large applications. React, on the other hand, is a UI library that simplifies building dynamic and 
 maintainable user interfaces through component-based architecture and declarative rendering. React solves frontend complexity that plain JavaScript alone becomes difficult to manage at scale.
 
-HIbernate 2nd Level Cache:
+-------------- Hibernate 2nd Level Cache ----------------------
 https://www.youtube.com/watch?v=-vKFxm9u68o
+https://www.youtube.com/watch?v=79s1d16ZltU
 
