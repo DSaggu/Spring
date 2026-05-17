@@ -5,7 +5,7 @@
  => acquire, release
 
 3. CountDownLatch latch
-=> latch.countDown(), latch.await()
+=> latch.countDown(), latch.await() = wait for countDownLatch becomes zero. 
 
 4. wait(), notify(), and notifyAll() must be called within a synchronized block on the same object; 
 otherwise, an IllegalMonitorStateException is thrown. This ensures the calling thread owns the monitor so the JVM can safely coordinate thread waiting and notification.”
@@ -14,6 +14,10 @@ Volatile = Prevents thread from cache variable which was not updated in run meth
 
 5. Thread Interleaving = Whem more than one thread udating variable and its not thread safe
 
+=> executor.shutdown() does not allow more thread to be added in queue
+=> BlockingQueue is synchronized 
+
+   private BlockingQueue<Integer> queue = new ArrayBlockingQueue<>(10);
 
 Methods to avoid deadlock:
 
