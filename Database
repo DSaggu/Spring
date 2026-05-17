@@ -87,7 +87,7 @@ Generally, inconsistent or environment-specific issues point to hardware, while 
 Ques: Why is try catch expensive ?
 Ans: The expensive part is: Throwing and creating exceptions. This is a very important Java interview concept.
 
-Database Indexing:
+---------------------------- Database Indexing -----------------------------
 
 Indexing creates memory location and column is stored in sorting order. It will also get updated on write operation.
 
@@ -146,6 +146,54 @@ Finally, I add unit/integration tests, containerize using Docker, configure CI/C
 Ques: How to retreive data efficiently ?
 Ans: Efficient data retrieval is usually a combination of proper indexing, optimized queries, caching, pagination, minimizing network overhead, and understanding access patterns. The best solution depends 
 on whether the system is read-heavy, write-heavy, transactional, or analytics-oriented.
+
+- Index what you query often. Not everything. More is not always better
+-- Primary keys -- automatically get an index
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,  -- Index created automatically
+    email VARCHAR(255)
+);
+
+-- Unique constraints -- automatically get an index
+ALTER TABLE users ADD CONSTRAINT unique_email UNIQUE (email);
+-- Index created automatically
+
+-- Foreign keys do NOT automatically get an index in PostgreSQL!
+-- (They do in MySQL)
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id)  -- NO automatic index!
+);
+
+-- You should create one manually
+CREATE INDEX idx_orders_user_id ON orders(user_id);
+
+Always create indexes on these:
+-- 1. Foreign keys (JOIN performance)
+CREATE INDEX idx_orders_user_id ON orders(user_id);
+CREATE INDEX idx_comments_post_id ON comments(post_id);
+
+-- 2. Columns in WHERE clauses (filter performance)
+CREATE INDEX idx_users_status ON users(status);
+CREATE INDEX idx_products_category ON products(category_id);
+
+-- 3. Columns in ORDER BY (sort performance)
+CREATE INDEX idx_posts_created_at ON posts(created_at);
+
+-- 4. Columns in GROUP BY (aggregation performance)
+CREATE INDEX idx_orders_product_id ON orders(product_id);
+
+Seq Scan = Sequential Scan = Full Table Scan = SLOW!
+https://medium.com/@anas-issath/database-indexing-the-performance-trick-nobody-explained-properly-83f4939a8441
+
+------------- The Left-Prefix Rule ------------------
+A composite index can be used for queries that filter on:
+
+First column only ✅
+First + second columns ✅
+First + second + third columns ✅
+
+https://medium.com/@anas-issath/database-indexing-the-performance-trick-nobody-explained-properly-83f4939a8441
 
 Ques: Why we need JavaScript, TypeScript and React ?
 Ans: JavaScript is the core programming language. TypeScript improves JavaScript by adding static typing and compile-time validation, which is especially valuable in large applications. React, on the other hand, is a UI library that simplifies building dynamic and 
