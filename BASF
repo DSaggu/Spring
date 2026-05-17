@@ -3,5 +3,5 @@ Ans: - Database
 1. Devices create test suite name. So, if tes_Suite_Name has more than 2 runs just create new test_suite_name.
 2. Join instead of N+1
 3. Create index on test_suite_name column and join columns
-4. pagination and last 10 records.
+4. pagination with KeySegment and last 10 records.
 5. 
