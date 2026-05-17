@@ -91,7 +91,7 @@ Database Indexing:
 
 Indexing creates memory location and column is stored in sorting order. It will also get updated on write operation.
 
-1. We read execution plan from right to left and top to right.
+1. We read execution plan from right to left and top to bottom.
 https://www.youtube.com/watch?v=YuRO9-rOgv4
 
 Clustered Index:
