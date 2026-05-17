@@ -184,6 +184,7 @@ CREATE INDEX idx_posts_created_at ON posts(created_at);
 CREATE INDEX idx_orders_product_id ON orders(product_id);
 
 Seq Scan = Sequential Scan = Full Table Scan = SLOW!
+Index scan ===
 https://medium.com/@anas-issath/database-indexing-the-performance-trick-nobody-explained-properly-83f4939a8441
 
 ------------- The Left-Prefix Rule ------------------
