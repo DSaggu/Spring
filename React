@@ -79,17 +79,20 @@ export default function Dashboard() {
   );
 }
 
-PureComponent = Component only renders when its prop values change. Although it does shallow comparison of its prop values and do not work for arrays and object. Because it use === under hood to compare
-values of object. So, we write new funciton comparing prev and next value of object.
+PureComponent = A Pure Component in React is an optimized component that only re-renders when its props or state actually change. By doing a "shallow comparison" of previous and new values, 
+it prevents unnecessary re-renders of child elements when the parent component re-renders, thereby boosting overall app performance. Although it does shallow comparison of its prop values and do not
+work for arrays and object. Because it use === under hood to compare values of object. So, we write new funciton comparing prev and next value of object.
+
+https://www.youtube.com/watch?v=QB6eSpBr2wQ&t=311s
 
 https://www.youtube.com/watch?v=uLhQACqs3fI
 
 Ques: How can you optimize performance in React app ?
 Ans: Performance optimization strategies include:
 
-• Code-splitting with React.lazy().
+• Code-splitting with React.lazy(). // We cannot use dynamic import because it returns Promise but, lazy() returns component
 
-• Memoizing components with React.memo.
+• Memoizing components with React.memo. // https://www.youtube.com/watch?v=uLhQACqs3fI
 
 • Debouncing or throttling events like input.
 
@@ -104,7 +107,7 @@ Interesting things:
 React Strict Mode is a development tool that helps you write safer, cleaner, and future-proof React code by highlighting potential issues early. For instance, useEffect runs twice, 2 api calls.
 
 ------ Working with APIs in React -----
-=> mount componet means render component. So basically finds bug in development environment not by users.
+=> mount component means render component. So basically finds bug in development environment not by users.
 => Pure function always return the same output for given same input with no side effects.
 
 Behaviour        Development                       Production
@@ -151,7 +154,7 @@ Real use case = conditional rendering of form based on value
 3. Link is faster than anchor tag because anchor tag reloads the page.
 
 ----- Reset in React Hook Form ------
-=> reset() function in form. Use with rest click button
+=> reset() function in form. Use with reset click button
 
 ----- reset the component -------
 If you try to update the state of component directly, then it won’t re-render the component.
