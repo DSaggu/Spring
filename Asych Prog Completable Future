@@ -33,7 +33,7 @@ public class AsyncConfig {
                 new ThreadPoolTaskExecutor();
 
         executor.setCorePoolSize(10);
-        executor.setMaxPoolSize(50);
+        executor.setMaxPoolSize(50); // maximum number of threads pool can grow to.
         executor.setQueueCapacity(100);
 
         executor.setThreadNamePrefix("async-thread-");
@@ -43,6 +43,23 @@ public class AsyncConfig {
         return executor;
     }
 }
+
+Meaning:
+If load increases beyond core threads + queue capacity,
+The pool can expand up to 50 threads total
+
+Example:
+Core = 10
+Queue full
+Then executor creates extra threads (11 → 50 max)
+
+If:
+    Core threads = 10
+    Queue = 100
+    Max threads = 50
+Then max concurrent execution = 50 threads, not 160 tasks.
+
+Concurrency means handling multiple tasks at the same time (logically), but not necessarily executing them simultaneously.
 
 3. Create Rest Template
 @Bean
@@ -98,10 +115,10 @@ public class OrderService {
         CompletableFuture.allOf(
                 userFuture,
                 paymentFuture
-        ).join();
+        ).join(); // wait for userFuture and paymentFuture to complete
 
         User user = userFuture.get();
-        Payment payment = paymentFuture.get();
+        Payment payment = paymentFuture.get(); // returns actual value
 
         return new OrderResponse(user, payment);
     }
