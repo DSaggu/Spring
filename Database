@@ -125,7 +125,8 @@ It stores:
 
 Think of: book index pointing to page numbers
 
-First, I clearly understand the functional and non-functional requirements such as scalability, performance, availability, security, expected traffic, and integration needs.
+Ques: How do you design spring boot application from scratch ?
+Ans: First, I clearly understand the functional and non-functional requirements such as scalability, performance, availability, security, expected traffic, and integration needs.
 
 Then I decide the architecture style — usually layered monolith or microservices depending on domain complexity and scaling requirements.
 
