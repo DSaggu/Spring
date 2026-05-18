@@ -130,4 +130,32 @@ Fetch Token API needs client secret as well as authorization code, and client se
 
 Client Id and Client Secret is generated after registering client with authorization server.
 => oAuth user information is saved in OAuth2
+
+------- Session V/S JWT token --------
+https://www.youtube.com/watch?v=fyTxwIa-1U0
+
+-- XSS happens when user-controlled input is not properly sanitized and ends up being executed as JavaScript in another user’s browser.
+-- PKCE = plain text code verifier to avoid from malicious app on same device where the client is
+
+Ques: Why PKCE needed ?
+Ans: PKCE (Proof Key for Code Exchange) is needed to protect the OAuth 2.0 Authorization Code flow from authorization code interception attacks.
+
+Without PKCE:
+    Client redirects user to login.
+    Authorization server returns an authorization code.
+    If an attacker intercepts that code, they can exchange it for an access token.
+    
+    PKCE prevents this by adding a secret generated dynamically by the client:
+    
+    Client creates:
+        code_verifier → random secret
+        code_challenge → hashed version of verifier
+    During login:
+        client sends code_challenge
+    During token exchange:
+        client sends original code_verifier
+    Authorization server hashes verifier and compares it with original challenge.
+    
+    If attacker steals only the authorization code, they still cannot get token because they do not have the code_verifier.
+
   
