@@ -174,3 +174,44 @@ this.state.message = 'Hello world'
 This is a process of moving the state as close to where you need it as possible. Sometimes in React app, we have a lot of unnecessary states inside the parent component which 
 makes the code less readable and harder to maintain. Not to forget, having many states inside a single component leads to unnecessary re-renders for the component. It is better 
 to shift states which are less valuable to the parent component, to a separate component.
+
+Observable = stream of data
+Subscriber = subscribes the data
+
+---- Promise V/s Observable -----
+RxJS = library for composing asynchronous and event-based (immediate and conitnuous response) programs by using observable sequences.
+Human language = It is javascript library that allow us to work with asynchronous data stream with the help of Observable. 
+
+1. Both are used to transfer data asynchrousnly
+2. Promise - wait for server to send whole data as single value. For instance, like milliion records
+           - They execute immediately after the creation
+           - Are not cancellable
+   Observable - Used for streams means works with multiple chunks of data.
+              - These are lazy means need to subscribe
+              - Can cancel the data by unsubscribing
+
+-> TypeScript (independent created by Microsoft) => TS compiler => JS (Browser can execute) 
+
+Advantages of TypeScript over JavaScript:
+1. It is strongly typed language
+2. Superset of Javascript
+3. Has object oriented features
+4. Detect error at compile time
+
+let someValue: string ="interview happy";
+someValue = 5; // compile time error
+
+---------- let vs var ----------
+function fnLetVar() {
+  for(var i=0; i<5; i++) {
+      console.log("Inside " + i);
+  }  
+  console.log("Outside " + i); // i variable out of loop but not out of function
+ // if var -> let then line 209 gives compile time error. let keyword is limited to the scope only where it is declared
+}
+
+--- OverLoading is not directy supported in TypeScript but Overriding
+
+
+
+   
