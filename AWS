@@ -1,8 +1,39 @@
 SNS: https://www.youtube.com/watch?v=1vMo6K4Zyas. Its pudh model.
 Java integration: https://www.youtube.com/watch?v=oFBht_Fuv-s
 
-SQS: Pull model 
+-------------- SQS: Pull model ------------------------
 Java Integration: https://www.youtube.com/watch?v=smR8TYzBE4s
+- Highly scalable
+- low cost
+
+Two types:
+1. Standard = at least one delivery, no ordering, unlimited throughput 
+2. FIFO = First in First out, exactly once processing, low throughput
+
+How to choose: Standard if throughput is important, FIFO if order is important.
+
+- Producer receives unique message id after putting the message in the queue
+- If one consumer is consuming the message along with receipt handle XYZ other consumer cannot consume it. After successfully consuming the
+message it deletes it using receipt handle XYZ.
+- Consumer has to process the message in expiry visibility time. Otherwise it goes to ready state.
+- After specfic number of processed failures the  message goes to Dead Letter Queue from ready queue.
+- Other AWS resources can access SQS using IAM roles like EC2 -> SQS
+- User has to configure SQS access policy to provide access to other accounts.
+
+Ques: How to reduce number of API calls to SQS ?
+Ans: Use LongPolling - When looking for messages you can specficy waitTimeSeconds upto 20 seconds.
+
+Ques: How about messages lost ?
+Ans: Maximum retention period = 4 days, max = 14 days.
+
+Ques: What is the best practice to give high priority to premium customers in SQS ?
+Ans: Create two queues - one for free customers and one for premium customers.
+
+--- > Amazon MQ => Amazon SQS (Queues) + Amazon SNS (Topics)
+   - Supports traditional APIs (JMS) and protocols (AMQP.MQTT, OpenWire, STOMP). So, easy to migrate on-premise applications using tradiional
+     message brokers.
+   - Start with Amazon MQ first then shift to Amazon SQS and SNS.
+
 
 Difference between SNS and SQS:
 https://www.youtube.com/watch?v=mXk0MNjlO7A&t=24s
@@ -12,3 +43,7 @@ Its not serverless. U need instnaces for that. Its in-memory cache like Redis an
 
 AWS Kineses: https://www.youtube.com/watch?v=2bGE5mFrcSw
 Its alternative of Kafka.
+
+----------------------- AWS Serverless = Lambda -----------------------------
+- Serverless = don't worry about infrastructure, scalability, availabiluty etc. Just pay for number of requests.
+- Event Sources = Amazon API Gateway. Amazon S3, Amazon Simple Queue Service, Amazon SNS
