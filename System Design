@@ -1,4 +1,32 @@
-Rate Limiter:
+-------------- Design Rate Limiter ------------------
 
+->  Most Redis clients handle connection pooling automatically, 
+but you need to tune the pool size based on your request volume and Redis response times.
+-> Geographic distribution provides the biggest latency wins.
+-> Eventual Consistency = A consistency model where, given enough time without new updates, all replicas will eventually return the same 
+value. Prioritizes availability over immediate consistency.
+-> DDoS protection: Use services like Cloudflare or AWS Shield that can detect and block malicious traffic before it reaches your rate limiter.
+-> A typical Redis instance can handle around 100,000-200,000 operations per second depending on operation complexity. At 1M requests/second, 
+even with simple operations, a single Redis instance cannot keep up with the throughput demands, requiring sharding across multiple instances.
+-> Deterministically mapping a client identifier (user/IP/API key) to one shard means all of that client's requests hit the same shard, so its counter stays accurate. Random 
+or round-robin assignment splits a client's requests across shards, so no single shard sees the true count and limits become ineffective.
+-> In-process rate limiting fails in distributed systems because each server only sees a portion of a user's total traffic. If requests are distributed across 5 servers, 
+each server might think a user is under their limit while globally they're exceeding it by 5x.
+-> Fixed Window - uses simple counters that reset at intervals.
+Sliding Window Log - stores every timestamp for perfect accuracy but uses more memory.
+Sliding Window Counter  - approximates sliding windows using weighted averages. 
+Token Bucket - allows burst traffic while maintaining steady-state limits via refill rate.
+-> Connection pooling maintains persistent connections to Redis, eliminating TCP handshake overhead (20-50ms) for each request. This is crucial for rate limiting where every request 
+requires a Redis check and latency directly impacts user experience.
+-> Hot keys occur when one user/IP generates enough requests to overwhelm a single Redis shard (tens of thousands of requests/second). This usually indicates abuse rather than
+legitimate traffic and should be blocked rather than accommodated.
+-> Token Bucket refills lazily. On each request you compute how many tokens to add from the time elapsed since the last refill, consume one, then store the new count and timestamp. 
+Without the timestamp you couldn't know how many tokens to add, so a bare counter isn't enough.
+-> The choice depends on what's worse for your system: brief API unavailability (fail-closed) or temporary uncontrolled traffic (fail-open). Consumer apps often fail-open to maintain availability. Financial systems, payment processors, 
+or APIs vulnerable to abuse may fail-closed to prevent system collapse or fraud, even if it means downtime.
+-> Poll-based systems are simpler to implement but have update delays (30+ seconds). Push-based systems like ZooKeeper provide immediate updates but add significant complexity around connection failures, 
+partial updates, and fallback mechanisms.
+
+References:
 1.https://www.youtube.com/watch?v=MIJFyUPG4Z4
 https://www.hellointerview.com/learn/system-design/problem-breakdowns/distributed-rate-limiter?ref=youtube_distributed-rate-limiter_description&utm_source=youtube&utm_medium=social&utm_campaign=distributed-rate-limiter&utm_content=description
