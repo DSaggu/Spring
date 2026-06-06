@@ -249,6 +249,12 @@ Map<String, Boolean> map = new HashMap<>();
   
   Real systems:
   preventing duplicate payments
+
+====== CIMC codility =============
+1. Write program where sum of two digits equal to given number. No number from pair should be divided by 10.
+2. Find the error in the code
+3. Basic java objective questions
+4. PL/SQL multiple choice questions
   avoiding duplicate Kafka event processing
   caching “already processed user IDs”
 
