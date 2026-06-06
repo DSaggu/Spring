@@ -1,3 +1,33 @@
+----------- UserDetails (in-built class)----------
+-> UserDetails interface is a core component in Spring Security that represents user in the application
+-> it provides necessary information about the user, such as username, password and authorities(roles)
+-> All following four classes makes UserDetails
+                      UserDetailsService (interface)
+                             |
+                            \|/
+                       UserDetailsManager (interface)
+                            |
+                ------------------------------
+               \|/                           \|/
+    JdbcUserDetailsManager         InMemoryUserDetailsManager
+     (Class)                          (Class)
+---------- User (in-built) ---------
+-> User is concrete implementation of UserDetails interface provided by Spring Security.
+-> It is often used to create UserDetails object withh predefined username, password and authorities.
+
+UserDetails user = User.withUsername("user")
+                       . password("passoword")
+                       .authorities("ROLE_USER")
+                       .build();
+
+---------------- UserDetailsService -----------------
+--> This uinterface is responsible for retrieving user related data
+--> It has single method that loads a user based on the username and returns UserDetails object.
+    UserDetails loadUserByUserName(String username) throws UsernameNotFoundException
+
+------------- UserDetailsManager ------------------
+--> This interface Provides additional capabilities for managing user like Creating, Updating and Deleting, as well as changing passwords and checking for user existence.
+
 Role Authorization:
 
 Spring has inbuilt interface and classes which are being used for Spring Security.
