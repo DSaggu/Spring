@@ -28,10 +28,10 @@ UserDetails user = User.withUsername("user")
 ------------- UserDetailsManager ------------------
 --> This interface Provides additional capabilities for managing user like Creating, Updating and Deleting, as well as changing passwords and checking for user existence.
 
-Role Authorization:
+--------------- Role Authorization -------------------------
 
 Spring has inbuilt interface and classes which are being used for Spring Security.
-- GrantedAuthority implemeented by SimpleGrantedAuthority 
+- GrantedAuthority implemented by SimpleGrantedAuthority 
 
 @PreAuthoriz, @Secured, 
 @PostAuthorize = to filter return objects based on role
@@ -49,7 +49,7 @@ Two ways:
 1. Method level Security =
 - Flexible, 
 - ideal for detailed control and complex conditions
--Tightly coupled with business logic
+- Tightly coupled with business logic
 
 2. Request matchers approach
 - URL based 
