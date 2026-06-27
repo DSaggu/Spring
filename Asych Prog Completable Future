@@ -57,7 +57,7 @@ If:
     Core threads = 10
     Queue = 100
     Max threads = 50
-Then max concurrent execution = 50 threads, not 160 tasks.
+Then max concurrent execution = 50 threads, not 100 tasks.
 
 Concurrency means handling multiple tasks at the same time (logically), but not necessarily executing them simultaneously.
 
