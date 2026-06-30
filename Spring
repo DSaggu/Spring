@@ -38,8 +38,23 @@ Ans: 1. used in password, database connections,
 memory  because of that memory becomes fast and enhances performance.
 => rollbackFor - used in Transactional annotation to rollback transactio in case of checked exception thrown
 => “In Spring, if a bean has a single constructor, dependency injection is automatically handled without @Autowired—this is constructor-based injection and is the recommended approach.”
-=> “No, a Spring bean can only be instantiated using one constructor. If multiple constructors are present, only one can be annotated with @Autowired to resolve ambiguity. Multiple autowired constructors would cause a bean creation failure.”
-= Use a single constructor and optional dependencies via:
+=> If multiple constructors exist, one constructor can be annotated with @Autowired to explicitly tell Spring which constructor to use. Having multiple constructors annotated with @Autowired(required=true)
+creates ambiguity and causes bean creation failure. 
+
+@Component 
+public class UserService { 
+private UserRepository repository; 
+private NotificationService notificationService;
+
+@Autowired public UserService(UserRepository repository) 
+{ this.repository = repository; }
+
+public UserService(UserRepository repository, NotificationService notificationService) 
+{ this.repository = repository; this.notificationService = notificationService; } }  
+
+Spring will use the constructor marked with @Autowired.
+
+=> Use a single constructor and optional dependencies via:
 public AdminController(UserService userService, Optional<AuditService> auditService) {
 
 => Here max concurrency is 100, means Only 100 calls will run at the same time. The remaining 900
@@ -58,15 +73,19 @@ webClient.get()
     this.userService = userService;
 }
 => A servlet is a Java server-side component that runs inside a servlet container and processes HTTP requests and responses, forming the foundation of Java web applications. E.g. DispatcherServlet
-=> Yes, we can override a servlet by extending HttpServlet or DispatcherServlet and overriding lifecycle methods like doGet, doPost, or doDispatch. However, in modern Spring applications, 
-it’s recommended to use filters, interceptors, or controller advice instead of overriding servlet implementations directly.
+=> Yes, we can override a servlet by extending HttpServlet or DispatcherServlet and overriding lifecycle methods like 
+    doGet, 
+    doPost, 
+    doDispatch. 
+However, in modern Spring applications, it’s recommended to use filters, interceptors, or controller advice instead of overriding servlet implementations directly.
 
 => when we create a repository interface that extends JpaRepository, CrudRepository, or PagingAndSortingRepository, Spring automatically finds it and creates an implementation at runtime.
 @Repository then?
 It is mainly about exception translation. If something goes wrong in the database (like a SQLException (persistence)), @Repository tells Spring to wrap it into a generic DataAccessException. This way,
 the error handling stays consistent. It does not handle the exception, it translates them to spring exception.
-For instance, DataIntegrityViolationException → duplicate key
-              EmptyResultDataAccessException → no data found
+   
+    For instance, DataIntegrityViolationException → duplicate key
+                  EmptyResultDataAccessException → no data found
 
 => @ControllerAdvice does not use AOP proxies. Instead, Spring MVC’s DispatcherServlet catches exceptions and delegates them to HandlerExceptionResolver, 
 specifically ExceptionHandlerExceptionResolver, which maps exceptions to @ExceptionHandler methods defined in @ControllerAdvice.
@@ -138,7 +157,7 @@ behavior in cascading and schema generation. mappedBy is essential to ensure a s
 The owning side is the entity that contains the foreign key column in the database. Only the owning side is responsible for updating the relationship in the database.
 Updating the inverse side only does NOT persist changes. Only the owning side controls the database foreign key.
 
-Middleware = Middleware is any software layer that sits between request and response processing. E.g Gatekeeper (External), INtercepter (internal)
+Middleware = Middleware is any software layer that sits between request and response processing. E.g Gatekeeper (External), Intercepter (internal)
 Real production example: Imagine an e-commerce system:
     At Gateway:
      - Check JWT token
