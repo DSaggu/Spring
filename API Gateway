@@ -26,7 +26,7 @@ Properties:
 1. Small traffic controller, router or middleman.
 
 Gateway Patterns:
-1. Backend for frontend = different gateways for differt types of cleints
+1. Backend for frontend = different gateways for differt types of clients
 2. Single entry point = Single GW point for different types of client. Simple management. All clients have same requirement.
 3. Aggregation Gateway = Combination of responses for different microservices send to GW
 
