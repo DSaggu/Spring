@@ -188,6 +188,9 @@ public class Main {
     }
 }
 
-- Reactor Netty creates Event Loop threads.
+- Reactor Netty server creates Event Loop threads.
 - CompletableFuture handles asynchronous computation, while Mono is a reactive abstraction that supports lazy execution, backpressure, composable event pipelines, and non-blocking stream processing.
-- Mono is lazy because it needs subscription
+- Mono is lazy because it needs subscription.
+
+Difference between CompletableFutur and Mono:
+-> https://medium.com/javarevisited/when-should-we-use-completablefuture-vs-reactive-streams-in-java-d343c5b675ba
