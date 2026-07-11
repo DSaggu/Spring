@@ -18,3 +18,17 @@ https://www.youtube.com/watch?v=V63YCnGpMoQ&list=PLV1HZYG6utmWGTXMmQxbPNadE_F0_B
 
 Docker Images -> Registry in ECR ->
 
+Architecture of Kubernetes:
+1. Control Pane = It manages the stae of cluster (group of worker nodes)
+ Controller Manager (Manage the state of cluster) - Scheduler (responsible for distributing work across multiple nodes) - etcd (distributed key value pair that holds cluter persistance state)
+              API Server (interface and communication medium between Control pane and rest of the cluster)
+
+2. Worker Node = Kubelet + Container Runtime + Pod
+  -> Each worker node can have one or more pods
+   Pod = It is simple and smallest unit of Kubernetes object model. It can have one or more containers
+
+3. Cluster = Group of worker nodes used to run containerized applications.
+ -> All the communication between control pane and worker node done by kubelet.
+ -> All  
+
+
