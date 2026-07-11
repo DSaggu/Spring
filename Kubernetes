@@ -60,6 +60,7 @@ Ans: Not designed to handle rolling updates or deployments
 
 -> ReplicaSets use selector to identify the pods it manages
 -> If the pod managed by ReplicaSet is deleted or fails, the ReplicaSet repllaces it automatically to maintain desired replica count.
+-> ReplicaSets are often used with deployments
 
 
 
