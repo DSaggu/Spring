@@ -19,7 +19,7 @@ https://www.youtube.com/watch?v=V63YCnGpMoQ&list=PLV1HZYG6utmWGTXMmQxbPNadE_F0_B
 Docker Images -> Registry in ECR ->
 
 Architecture of Kubernetes:
-1. Control Pane = It manages the stae of cluster (group of worker nodes)
+1. Control Plane = It manages the stae of cluster (group of worker nodes)
  Controller Manager (Manage the state of cluster) - Scheduler (responsible for distributing work across multiple nodes) - etcd (distributed key value pair that holds cluter persistance state)
               API Server (interface and communication medium between Control pane and rest of the cluster)
 
@@ -30,5 +30,36 @@ Architecture of Kubernetes:
 3. Cluster = Group of worker nodes used to run containerized applications.
  -> All the communication between control pane and worker node done by kubelet.
  -> All  
+
+Features of Pod:
+1. A Pod is not durable entity
+2. Pods are not designed for horizontal scaling on their own. It has to be done through deployment or replica set.
+3. Pods need to be stateless
+4. Pods communicate with each other in cluster using localhost
+5. Pods are assigned unique ip address within cluster.
+6. Lifecycle and availabilty of pods are managed by kubernetes.
+7. Pods are immutable, once created user cannot add and remove containers inside it.
+8. Pods are ephimeral, they can be be created and destroyed anytime.
+
+Types of Service:
+1. ClusterIP
+2. NodePort
+3. LoadBalancer
+
+ReplicaSet: Kubernetes object used for managing and scaling set of identical pod replicas.
+
+Why we need Identical Pods: 
+1. High availability
+2. Load balancing
+3. Scaling
+4. Rolling Updates
+5. Service Discovery and Load Balancing
+
+Ques: What a ReplicaSet is not ?
+Ans: Not designed to handle rolling updates or deployments
+
+-> ReplicaSets use selector to identify the pods it manages
+-> If the pod managed by ReplicaSet is deleted or fails, the ReplicaSet repllaces it automatically to maintain desired replica count.
+
 
 
